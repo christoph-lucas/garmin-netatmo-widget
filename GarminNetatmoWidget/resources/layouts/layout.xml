@@ -1,3 +1,5 @@
 <layout id="MainLayout">
-    <bitmap id="id_monkey" x="center" y="center" filename="../drawables/monkey.png" />
+    <label id="name" text="Station Name" x="center" y="33%" justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" font="Graphics.FONT_MEDIUM" color="Graphics.COLOR_WHITE" />
+    <label id="temperature" text="Temperature" x="center" y="50%" justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" font="Graphics.FONT_MEDIUM" color="Graphics.COLOR_WHITE" />
+    <label id="co2" text="CO2" x="center" y="66%" justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" font="Graphics.FONT_MEDIUM" color="Graphics.COLOR_WHITE" />
 </layout>
