@@ -1,0 +1,1 @@
+# garmin-netatmo-widget
