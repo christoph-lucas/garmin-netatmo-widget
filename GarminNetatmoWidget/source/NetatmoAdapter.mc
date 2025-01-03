@@ -2,28 +2,33 @@ import Toybox.Lang;
 
 class NetatmoAdapter {
 
-    // TODO cache retrieved data from netatmo for e.g. 5 minutes
+    private var _authenticator as NetatmoAuthenticator;
+    private var _retriever as NetatmoDataRetriever;
+    private var _dataConsumer as Method;
 
+    public function initialize(client_id as String, client_secret as String, dataConsumer as Method) {
+        self._dataConsumer = dataConsumer;
 
-    public function initialize() {
-        // TODO receive necessary config flags, e.g. client id and secret to access Netatmo API
+        self._authenticator = new NetatmoAuthenticator(client_id, client_secret, method(:loadDataGivenToken));
+        self._retriever = new NetatmoDataRetriever(method(:returnLoadedData));
     }
 
-    public function ensureAuthenticated() {
-        // TODO ensure Auth is done
+    public function loadStationData() as Void {
+        self._authenticator.requestAccessToken();
     }
 
-    public function getDefaultStation() as NetatmoStationData {
-        // TODO make call to netatmo and retrieve the data
-        return new NetatmoStationData("default", 23.5, 512);
+    public function loadDataGivenToken(accessToken as String?, error as NetatmoError?) as Void {
+        if (error != null) {
+            self._dataConsumer.invoke(null, error);
+        } else if (accessToken != null) {
+            self._retriever.loadData(accessToken);
+        } else {
+            self._dataConsumer.invoke(null, new NetatmoError("loadDataGivenToken: Neither Access Token nor Error given."));
+        }
     }
 
-    public function getAllStations() as Array<NetatmoStationData> {
-        // TODO make call to netatmo and retrieve the data
-        return [
-            new NetatmoStationData("default", 23.5, 512),
-            new NetatmoStationData("other", 30.5, 798)
-            ];
+    public function returnLoadedData(data as NetatmoStationData?, error as NetatmoError?) as Void {
+        self._dataConsumer.invoke(data, error);
     }
 
 }
