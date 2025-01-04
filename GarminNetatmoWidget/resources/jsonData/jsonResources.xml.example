@@ -1,0 +1,9 @@
+<jsonDataResources>
+    <jsonData id="netatmoClientAuth">
+        <!-- Take values from https://dev.netatmo.com/apps/ -> corresponding app -->
+        {
+            "id" : "xxx", 
+            "secret" : "yyy"
+        }
+    </jsonData>
+</jsonDataResources>
