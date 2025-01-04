@@ -60,14 +60,15 @@ class StationsDataEndpoint {
         if (responseCode == 200) {
             self._handler.invoke(self._mapResponseToMainStationData(data));
         } else {
-            var error = data["error"];
+            var typedData = data as Dictionary<String, Dictionary<String, String or Number>>;
+            var error = typedData["error"];
             self._errorHandler.invoke(new NetatmoError("onReceiveHomesData: Response code " + responseCode + ", error: " + error));
         }
     }
 
-    private function _mapResponseToMainStationData(data as Dictionary) as  NetatmoStationData {
-        var body = data["body"] as Dictionary;
-        var devices = body["devices"] as Array;
+    private function _mapResponseToMainStationData(data as Dictionary<String, String or Dictionary>) as  NetatmoStationData {
+        var body = data["body"] as Dictionary<String, Array or Dictionary>;
+        var devices = body["devices"] as Array<Dictionary>;
         var firstDevice = devices[0] as Dictionary;
         var firstDeviceDashboardData = firstDevice["dashboard_data"] as Dictionary;
 

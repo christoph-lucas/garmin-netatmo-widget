@@ -148,13 +148,14 @@ class AuthenticationEndpoint {
     // should be private, yet the I could not figure out how to provide a callback to a private method
     public function onOAuthMessage(message as Authentication.OAuthMessage) as Void {
         if (message.data != null) {
-            var error = message.data[$.OAUTH_ERROR];
+            var data = message.data as Dictionary<String, String>;
+            var error = data[$.OAUTH_ERROR];
             if (notEmpty(error)) {
                 self._errorHandler.invoke(new NetatmoError("onOAuthMessage: " + error));
                 return;
             }
-            var code = message.data[$.OAUTH_CODE];
-            self._handler.invoke(code as String);
+            var code = data[$.OAUTH_CODE];
+            self._handler.invoke(code);
         } else {
             self._errorHandler.invoke(new NetatmoError("onOAuthMessage: Data is missing in OAuth Return Message!"));
         }
@@ -211,9 +212,10 @@ class TokensFromCodeEndpoint {
     // STEP 1c
     public function onReceiveTokens(responseCode as Number, data as Dictionary or String or Null) as Void {
         if (responseCode == 200) {
-            var refresh_token = data["refresh_token"];
-            var accessToken = data["access_token"];
-            var expires_in = data["expires_in"];
+            var typedData = data as Dictionary<String, String>;
+            var refresh_token = typedData["refresh_token"];
+            var accessToken = typedData["access_token"];
+            var expires_in = typedData["expires_in"];
             self._handler.invoke(refresh_token, accessToken, expires_in);
         } else {
             self._errorHandler.invoke(new NetatmoError("onReceiveTokens: Response code " + responseCode));
@@ -268,9 +270,10 @@ class RefreshAccessTokenEndpoint {
 
     public function onReceiveTokens(responseCode as Number, data as Dictionary or String or Null) as Void {
         if (responseCode == 200) {
-            var refresh_token = data["refresh_token"];
-            var accessToken = data["access_token"];
-            var expires_in = data["expires_in"];
+            var typedData = data as Dictionary<String, String>;
+            var refresh_token = typedData["refresh_token"];
+            var accessToken = typedData["access_token"];
+            var expires_in = typedData["expires_in"];
             self._handler.invoke(refresh_token, accessToken, expires_in);
         } else {
             self._errorHandler.invoke(new NetatmoError("onReceiveTokens: Response code " + responseCode));

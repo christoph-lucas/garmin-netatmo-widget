@@ -10,7 +10,7 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
-        var netatmoClientAuth = Application.loadResource(Rez.JsonData.netatmoClientAuth);
+        var netatmoClientAuth = Application.loadResource(Rez.JsonData.netatmoClientAuth) as Dictionary<String, String>;
         self._netatmo = new NetatmoAdapter(netatmoClientAuth["id"], netatmoClientAuth["secret"], method(:onDataLoaded));
         self._initialView = new GarminNetatmoWidgetView();
     }
