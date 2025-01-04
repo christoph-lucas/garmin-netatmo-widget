@@ -63,6 +63,7 @@ class GarminNetatmoWidgetView extends WatchUi.View {
 
     private function _drawError(dc as Dc) as Void {
         if (self._error == null) {return;}
+        // FIXME use textarea so as much as possible of the error message fits on screen
         dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_SMALL, self._error.message(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
