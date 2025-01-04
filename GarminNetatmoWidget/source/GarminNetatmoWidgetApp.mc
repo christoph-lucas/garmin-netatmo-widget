@@ -5,16 +5,19 @@ import Toybox.System;
 
 class GarminNetatmoWidgetApp extends Application.AppBase {
 
-    private var netatmo as NetatmoAdapter;
+    private var _netatmo as NetatmoAdapter;
+    private var _initialView as GarminNetatmoWidgetView;
 
     function initialize() {
         AppBase.initialize();
-        self.netatmo = new NetatmoAdapter();
+        var netatmoClientAuth = Application.loadResource(Rez.JsonData.netatmoClientAuth);
+        self._netatmo = new NetatmoAdapter(netatmoClientAuth["id"], netatmoClientAuth["secret"], method(:onDataLoaded));
+        self._initialView = new GarminNetatmoWidgetView();
     }
 
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
-        self.netatmo.ensureAuthenticated();
+        self._netatmo.loadStationData();
     }
 
     // onStop() is called when your application is exiting
@@ -23,16 +26,12 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
 
     // Return the initial view of your application here
     function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [ new GarminNetatmoWidgetView(self.netatmo.getDefaultStation()) ];
-        // TODO return data for all stations 
-        //var data = self.netatmo.getAllStations();
-        //var views = new [data.size()] as [Views];
-        //for (var i = 0; i<data.size(); i++) {
-        //    views[i] = new GarminNetatmoWidgetView(data[i]);
-        //}
-        //return views;
+        return [ self._initialView ];
     }
 
+    public function onDataLoaded(data as NetatmoStationData?, error as NetatmoError?) {
+        self._initialView.setData(data, error);
+    }
 }
 
 function getApp() as GarminNetatmoWidgetApp {
