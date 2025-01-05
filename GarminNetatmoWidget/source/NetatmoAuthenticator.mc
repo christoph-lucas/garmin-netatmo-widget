@@ -113,7 +113,7 @@ class AuthenticationEndpoint {
     }
 
     public function callAndThen(authenticationCodeHandler as Method) {
-        if (self._handler != null) {return;} // TODO throw exception
+        if (self._handler != null) {return;} // FIXME throw exception
         self._handler = authenticationCodeHandler;
         self._requestAuthenticationCode();
     }
@@ -176,7 +176,7 @@ class TokensFromCodeEndpoint {
     }
 
     public function callAndThen(authenticationCode as String, tokensHandler as Method) {
-        if (self._handler != null) {return;} // TODO throw exception
+        if (self._handler != null) {return;} // FIXME throw exception
         self._handler = tokensHandler;
         self._getTokensFrom(authenticationCode);
     }
@@ -236,7 +236,7 @@ class RefreshAccessTokenEndpoint {
     }
 
     public function callAndThen(refreshToken as String, accessTokenHandler as Method) {
-        if (self._handler != null) {return;} // TODO throw exception
+        if (self._handler != null) {return;} // FIXME throw exception
         self._handler = accessTokenHandler;
         self._refreshAccessToken(refreshToken);
     }
