@@ -52,13 +52,16 @@ class GarminNetatmoWidgetView extends WatchUi.View {
     private function _drawData(dc as Dc) as Void {
         if (self._data == null) {return;}
 
-        dc.drawText(dc.getWidth() / 2, dc.getHeight() / 3, Graphics.FONT_MEDIUM, self._data.name(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(dc.getWidth() / 2, 0.25 * dc.getHeight(), Graphics.FONT_SMALL, self._data.name(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        var time = self._data.measurementTimestamp();
+        dc.drawText(dc.getWidth() / 2, 0.4 * dc.getHeight(), Graphics.FONT_TINY, time, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         
-        var temp = "Temp: " + self._data.temperature().format("%.1f") + "°C";
-        dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_MEDIUM, temp, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        var temp = self._data.temperature().toLongString();
+        dc.drawText(dc.getWidth() / 2, 0.5 * dc.getHeight(), Graphics.FONT_TINY, temp, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        var co2 = "CO2: " + self._data.co2() + "ppm";
-        dc.drawText(dc.getWidth() / 2, 2 * dc.getHeight() / 3, Graphics.FONT_MEDIUM, co2, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        var co2 = self._data.co2().toLongString();
+        dc.drawText(dc.getWidth() / 2, 0.6 * dc.getHeight(), Graphics.FONT_TINY, co2, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
     }
 
     private function _drawError(dc as Dc) as Void {

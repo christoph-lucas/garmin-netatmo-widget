@@ -14,8 +14,8 @@ class GarminNetatmoWidgetGlanceView extends Ui.GlanceView {
         var justification = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
         if (self._data != null) {
             dc.drawText(0, 0.33 * dc.getHeight(), Graphics.FONT_SMALL, self._data.name(), justification);
-            var temp = self._data.temperature().format("%.1f") + "°C";
-            var co2 = self._data.co2() + "ppm";
+            var temp = self._data.temperature().toShortString();
+            var co2 = self._data.co2().toShortString();
             dc.drawText(0, 0.75 * dc.getHeight(), Graphics.FONT_TINY, temp + " / " + co2, justification);
         } else {
             dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_SMALL, "Loading...", justification);

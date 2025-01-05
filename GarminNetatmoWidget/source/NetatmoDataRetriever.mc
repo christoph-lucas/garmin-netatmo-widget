@@ -1,4 +1,5 @@
 import Toybox.Lang;
+import Toybox.Time;
 
 class NetatmoDataRetriever {
 
@@ -73,10 +74,11 @@ class StationsDataEndpoint {
         var firstDeviceDashboardData = firstDevice["dashboard_data"] as Dictionary;
 
         var name = firstDevice["module_name"] as String;
+        var measurementTimestamp = firstDeviceDashboardData["time_utc"] as Number;
         var temp = firstDeviceDashboardData["Temperature"] as Float;
         var co2 = firstDeviceDashboardData["CO2"] as Number;
 
-        return new NetatmoStationData(name, temp, co2);
+        return new NetatmoStationData(name, new Moment(measurementTimestamp), new Temperature(temp), new CO2(co2));
 
         // NB: other modules are in body.devices[i].modules
     }
