@@ -2,8 +2,8 @@ import Toybox.Lang;
 
 class NetatmoStationData {
     private var _name as String;
-    private var _temperature as Float;
-    private var _co2 as Number;
+    private var _temperature as Float; // FIXME model as Domain Primitive Temperature
+    private var _co2 as Number; // FIXME model as Domain Primitive CO2
 
     public function initialize(name as String, temperature as Float, co2 as Number) {
         me._name = name;
