@@ -10,8 +10,12 @@ class GarminNetatmoWidgetView extends WatchUi.View {
         View.initialize();
     }
 
-    public function setData(data as NetatmoStationData?, error as NetatmoError?) as Void {
+    public function setData(data as NetatmoStationData) as Void {
         self._data = data;
+        WatchUi.requestUpdate();
+    }
+
+    public function setError(error as NetatmoError) as Void {
         self._error = error;
         WatchUi.requestUpdate();
     }
