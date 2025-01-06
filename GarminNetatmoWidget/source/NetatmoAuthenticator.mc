@@ -14,19 +14,24 @@ const OAUTH_CODE = "netatmoOAuthCode";
 const OAUTH_ERROR = "netatmoOAuthError";
 const OAUTH_STATE = "netatmoOAuthState"; // FIXME implement for additional security against CSRF
 
+typedef AccessTokenConsumer as Method(accessToken as String?, error as NetatmoError?) as Void;
+typedef AuthenticationErrorHandler as Method(error as NetatmoError) as Void;
+typedef AuthenticationCodeHandler as Method(authenticationCode as String) as Void;
+typedef TokensHandler as Method(refresh_token as String, accessToken as String, expiresIn as Number) as Void;
+
 class NetatmoAuthenticator {
 
     private var _clientId as String;
     private var _clientSecret as String;
-    private var _accessTokenConsumer as Method;
+    private var _accessTokenConsumer as AccessTokenConsumer;
 
-    public function initialize(clientId as String, clientSecret as String, accessTokenConsumer as Method) {
+    public function initialize(clientId as String, clientSecret as String, accessTokenConsumer as AccessTokenConsumer) {
         self._clientId = clientId;
         self._clientSecret = clientSecret;
         self._accessTokenConsumer = accessTokenConsumer;
     }
 
-    public function errorHandler(error as NetatmoError) {
+    public function errorHandler(error as NetatmoError) as Void {
         self._accessTokenConsumer.invoke(null, error);
     }
 
@@ -56,7 +61,7 @@ class NetatmoAuthenticator {
     }
 
     // STEP 1b
-    public function _getTokensFrom(authenticationCode as String) {
+    public function _getTokensFrom(authenticationCode as String) as Void {
         new TokensFromCodeEndpoint(self._clientId, self._clientSecret, method(:errorHandler))
             .callAndThen(authenticationCode, method(:_receiveTokens));
     }
@@ -104,15 +109,15 @@ class NetatmoAuthenticator {
 class AuthenticationEndpoint {
 
     private var _clientId as String;
-    private var _handler as Method?;
-    private var _errorHandler as Method;
+    private var _handler as AuthenticationCodeHandler?;
+    private var _errorHandler as AuthenticationErrorHandler;
 
-    public function initialize(clientId as String, errorHandler as Method) {
+    public function initialize(clientId as String, errorHandler as AuthenticationErrorHandler) {
         self._clientId = clientId;
         self._errorHandler = errorHandler;
     }
 
-    public function callAndThen(authenticationCodeHandler as Method) {
+    public function callAndThen(authenticationCodeHandler as AuthenticationCodeHandler) {
         if (self._handler != null) {return;} // FIXME throw exception
         self._handler = authenticationCodeHandler;
         self._requestAuthenticationCode();
@@ -166,16 +171,16 @@ class AuthenticationEndpoint {
 class TokensFromCodeEndpoint {
     private var _clientId as String;
     private var _clientSecret as String;
-    private var _handler as Method?;
-    private var _errorHandler as Method;
+    private var _handler as TokensHandler?;
+    private var _errorHandler as AuthenticationErrorHandler;
 
-    public function initialize(clientId as String, clientSecret as String, errorHandler as Method) {
+    public function initialize(clientId as String, clientSecret as String, errorHandler as AuthenticationErrorHandler) {
         self._clientId = clientId;
         self._clientSecret = clientSecret;
         self._errorHandler = errorHandler;
     }
 
-    public function callAndThen(authenticationCode as String, tokensHandler as Method) {
+    public function callAndThen(authenticationCode as String, tokensHandler as TokensHandler) {
         if (self._handler != null) {return;} // FIXME throw exception
         self._handler = tokensHandler;
         self._getTokensFrom(authenticationCode);
@@ -215,7 +220,7 @@ class TokensFromCodeEndpoint {
             var typedData = data as Dictionary<String, String>;
             var refresh_token = typedData["refresh_token"];
             var accessToken = typedData["access_token"];
-            var expires_in = typedData["expires_in"];
+            var expires_in = typedData["expires_in"] as Number;
             self._handler.invoke(refresh_token, accessToken, expires_in);
         } else {
             self._errorHandler.invoke(new NetatmoError("onReceiveTokens: Response code " + responseCode));
@@ -226,18 +231,18 @@ class TokensFromCodeEndpoint {
 class RefreshAccessTokenEndpoint {
     private var _clientId as String;
     private var _clientSecret as String;
-    private var _handler as Method?;
-    private var _errorHandler as Method;
+    private var _handler as TokensHandler?;
+    private var _errorHandler as AuthenticationErrorHandler;
 
-    public function initialize(clientId as String, clientSecret as String, errorHandler as Method) {
+    public function initialize(clientId as String, clientSecret as String, errorHandler as AuthenticationErrorHandler) {
         self._clientId = clientId;
         self._clientSecret = clientSecret;
         self._errorHandler = errorHandler;
     }
 
-    public function callAndThen(refreshToken as String, accessTokenHandler as Method) {
+    public function callAndThen(refreshToken as String, tokenHandler as TokensHandler) {
         if (self._handler != null) {return;} // FIXME throw exception
-        self._handler = accessTokenHandler;
+        self._handler = tokenHandler;
         self._refreshAccessToken(refreshToken);
     }
 
@@ -273,7 +278,7 @@ class RefreshAccessTokenEndpoint {
             var typedData = data as Dictionary<String, String>;
             var refresh_token = typedData["refresh_token"];
             var accessToken = typedData["access_token"];
-            var expires_in = typedData["expires_in"];
+            var expires_in = typedData["expires_in"] as Number;
             self._handler.invoke(refresh_token, accessToken, expires_in);
         } else {
             self._errorHandler.invoke(new NetatmoError("onReceiveTokens: Response code " + responseCode));

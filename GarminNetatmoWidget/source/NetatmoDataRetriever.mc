@@ -1,18 +1,22 @@
 import Toybox.Lang;
 import Toybox.Time;
 
+typedef StationsDataConsumer as Method(data as NetatmoStationsData) as Void;
+typedef RetrievedDataConsumer as Method(data as NetatmoStationData?, error as NetatmoError?) as Void;
+typedef StationsErrorHandler as Method(error as NetatmoError) as Void;
+
 class NetatmoDataRetriever {
 
     // FIXME cache retrieved data from netatmo for e.g. 5 minutes in persistent storage
 
-    private var _dataConsumer as Method;
+    private var _dataConsumer as RetrievedDataConsumer;
 
-    public function initialize(dataConsumer as Method) {
+    public function initialize(dataConsumer as RetrievedDataConsumer) {
         self._dataConsumer = dataConsumer;
     }
 
     public function loadData(accessToken as String) as Void {
-        new StationsDataEndpoint(accessToken, method(:processHomesData))
+        new StationsDataEndpoint(accessToken, method(:errorHandler))
             .callAndThen(method(:processHomesData));
     }
 
@@ -21,20 +25,24 @@ class NetatmoDataRetriever {
         self._dataConsumer.invoke(data.device(0).mainStation(), null);
     }
 
+    public function errorHandler(error as NetatmoError) as Void {
+        self._dataConsumer.invoke(null, error);
+    }
+
 }
 
 //! see https://dev.netatmo.com/apidocumentation/weather#getstationsdata
 class StationsDataEndpoint {
     private var _accessToken as String;
-    private var _handler as Method?;
-    private var _errorHandler as Method;
+    private var _handler as StationsDataConsumer?;
+    private var _errorHandler as StationsErrorHandler;
 
-    public function initialize(accessToken as String, errorHandler as Method) {
+    public function initialize(accessToken as String, errorHandler as StationsErrorHandler) {
         self._accessToken = accessToken;
         self._errorHandler = errorHandler;
     }
 
-    public function callAndThen(homesDataHandler as Method) {
+    public function callAndThen(homesDataHandler as StationsDataConsumer) {
         if (self._handler != null) {return;} // FIXME throw exception
         self._handler = homesDataHandler;
         self._requestHomesData();
