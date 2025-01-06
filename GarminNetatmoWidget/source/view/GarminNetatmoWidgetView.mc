@@ -34,9 +34,9 @@ class GarminNetatmoWidgetView extends WatchUi.View {
         dc.clear();
 
         if (self._data != null) {
-            self._drawData(dc);
+            NetatmoStationDrawer.draw(dc, self._data);
         } else if (self._error != null) {
-            self._drawError(dc);
+            self._drawError(dc, self._error);
         } else {
             self._drawLoading(dc);
         }
@@ -49,25 +49,17 @@ class GarminNetatmoWidgetView extends WatchUi.View {
     function onHide() as Void {
     }
 
-    private function _drawData(dc as Dc) as Void {
-        if (self._data == null) {return;}
-
-        dc.drawText(dc.getWidth() / 2, 0.25 * dc.getHeight(), Graphics.FONT_SMALL, self._data.name(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        var time = self._data.measurementTimestamp();
-        dc.drawText(dc.getWidth() / 2, 0.4 * dc.getHeight(), Graphics.FONT_TINY, time, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        
-        var temp = self._data.temperature().toLongString();
-        dc.drawText(dc.getWidth() / 2, 0.5 * dc.getHeight(), Graphics.FONT_TINY, temp, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
-        var co2 = self._data.co2().toLongString();
-        dc.drawText(dc.getWidth() / 2, 0.6 * dc.getHeight(), Graphics.FONT_TINY, co2, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
-    }
-
-    private function _drawError(dc as Dc) as Void {
-        if (self._error == null) {return;}
-        // FIXME use textarea so as much as possible of the error message fits on screen
-        dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_SMALL, self._error.message(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+    private function _drawError(dc as Dc, error as NetatmoError) as Void {
+        var errorTextArea = new WatchUi.TextArea({
+            :text => error.message(),
+            :color => Graphics.COLOR_WHITE,
+            :font => [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_XTINY],
+            :locX => WatchUi.LAYOUT_HALIGN_CENTER,
+            :locY=> WatchUi.LAYOUT_VALIGN_CENTER,
+            :width => dc.getWidth(),
+            :height => dc.getHeight()
+        });
+        errorTextArea.draw(dc);
     }
 
     private function _drawLoading(dc as Dc) as Void {
