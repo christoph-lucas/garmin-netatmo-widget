@@ -35,9 +35,11 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
         return [ self._glanceView ];
     }
 
-    public function onDataLoaded(data as NetatmoStationData?, error as NetatmoError?) as Void {
-        self._initialView.setData(data, error);
-        self._glanceView.setData(data);
+    public function onDataLoaded(data as NetatmoStationsData?, error as NetatmoError?) as Void {
+        var mainStation = null as NetatmoStationData?;
+        if (data != null) {mainStation = data.device(0).mainStation();}
+        self._initialView.setData(mainStation, error);
+        self._glanceView.setData(mainStation);
     }
 }
 

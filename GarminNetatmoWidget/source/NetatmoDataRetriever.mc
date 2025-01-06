@@ -2,7 +2,7 @@ import Toybox.Lang;
 import Toybox.Time;
 
 typedef StationsDataConsumer as Method(data as NetatmoStationsData) as Void;
-typedef RetrievedDataConsumer as Method(data as NetatmoStationData?, error as NetatmoError?) as Void;
+typedef RetrievedDataConsumer as Method(data as NetatmoStationsData?, error as NetatmoError?) as Void;
 typedef StationsErrorHandler as Method(error as NetatmoError) as Void;
 
 class NetatmoDataRetriever {
@@ -21,8 +21,7 @@ class NetatmoDataRetriever {
     }
 
     public function processHomesData(data as NetatmoStationsData) as Void {
-        // TODO hand back all data and pick the right data to be displayed somewhere else
-        self._dataConsumer.invoke(data.device(0).mainStation(), null);
+        self._dataConsumer.invoke(data, null);
     }
 
     public function errorHandler(error as NetatmoError) as Void {

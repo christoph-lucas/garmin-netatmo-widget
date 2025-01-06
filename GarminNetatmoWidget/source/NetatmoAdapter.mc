@@ -1,6 +1,6 @@
 import Toybox.Lang;
 
-typedef DataConsumer as Method(data as NetatmoStationData?, error as NetatmoError?) as Void;
+typedef DataConsumer as Method(data as NetatmoStationsData?, error as NetatmoError?) as Void;
 
 class NetatmoAdapter {
 
@@ -29,7 +29,7 @@ class NetatmoAdapter {
         }
     }
 
-    public function returnLoadedData(data as NetatmoStationData?, error as NetatmoError?) as Void {
+    public function returnLoadedData(data as NetatmoStationsData?, error as NetatmoError?) as Void {
         self._dataConsumer.invoke(data, error);
     }
 
