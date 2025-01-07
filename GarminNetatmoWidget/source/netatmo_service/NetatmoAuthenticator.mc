@@ -21,13 +21,11 @@ typedef TokensHandler as Method(refresh_token as String, accessToken as String, 
 
 class NetatmoAuthenticator {
 
-    private var _clientId as String;
-    private var _clientSecret as String;
+    private var _clientAuth as NetatmoClientAuth;
     private var _accessTokenConsumer as AccessTokenConsumer;
 
-    public function initialize(clientId as String, clientSecret as String, accessTokenConsumer as AccessTokenConsumer) {
-        self._clientId = clientId;
-        self._clientSecret = clientSecret;
+    public function initialize(netatmoClientAuth as NetatmoClientAuth, accessTokenConsumer as AccessTokenConsumer) {
+        self._clientAuth = netatmoClientAuth;
         self._accessTokenConsumer = accessTokenConsumer;
     }
 
@@ -56,13 +54,13 @@ class NetatmoAuthenticator {
         if (notEmpty(refreshToken)) {
             self._ensureAccessTokenValidity();
         } else {
-            new AuthenticationEndpoint(self._clientId, method(:errorHandler)).callAndThen(method(:_getTokensFrom));
+            new AuthenticationEndpoint(self._clientAuth, method(:errorHandler)).callAndThen(method(:_getTokensFrom));
         }
     }
 
     // STEP 1b
     public function _getTokensFrom(authenticationCode as String) as Void {
-        new TokensFromCodeEndpoint(self._clientId, self._clientSecret, method(:errorHandler))
+        new TokensFromCodeEndpoint(self._clientAuth, method(:errorHandler))
             .callAndThen(authenticationCode, method(:_receiveTokens));
     }
 
@@ -80,7 +78,7 @@ class NetatmoAuthenticator {
             }
         }
         var refreshToken = Storage.getValue(REFRESH_TOKEN);
-        new RefreshAccessTokenEndpoint(self._clientId, self._clientSecret, method(:errorHandler))
+        new RefreshAccessTokenEndpoint(self._clientAuth, method(:errorHandler))
             .callAndThen(refreshToken, method(:_receiveTokens));
     }
 
@@ -108,12 +106,12 @@ class NetatmoAuthenticator {
 
 class AuthenticationEndpoint {
 
-    private var _clientId as String;
+    private var _clientAuth as NetatmoClientAuth;
     private var _handler as AuthenticationCodeHandler?;
     private var _errorHandler as AuthenticationErrorHandler;
 
-    public function initialize(clientId as String, errorHandler as AuthenticationErrorHandler) {
-        self._clientId = clientId;
+    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as AuthenticationErrorHandler) {
+        self._clientAuth = clientAuth;
         self._errorHandler = errorHandler;
     }
 
@@ -130,7 +128,7 @@ class AuthenticationEndpoint {
 
         var params = {
             "redirect_uri" => "connectiq://oauth",
-            "client_id" => self._clientId,
+            "client_id" => self._clientAuth.id(),
             "scope" => "read_station"
         };
 
@@ -169,14 +167,12 @@ class AuthenticationEndpoint {
 }
 
 class TokensFromCodeEndpoint {
-    private var _clientId as String;
-    private var _clientSecret as String;
+    private var _clientAuth as NetatmoClientAuth;
     private var _handler as TokensHandler?;
     private var _errorHandler as AuthenticationErrorHandler;
 
-    public function initialize(clientId as String, clientSecret as String, errorHandler as AuthenticationErrorHandler) {
-        self._clientId = clientId;
-        self._clientSecret = clientSecret;
+    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as AuthenticationErrorHandler) {
+        self._clientAuth = clientAuth;
         self._errorHandler = errorHandler;
     }
 
@@ -191,8 +187,8 @@ class TokensFromCodeEndpoint {
         // see https://developer.garmin.com/connect-iq/api-docs/Toybox/Communications.html#makeWebRequest-instance_function
         var params = {
             "grant_type" => "authorization_code",
-            "client_id" => self._clientId,
-            "client_secret" => self._clientSecret,
+            "client_id" => self._clientAuth.id(),
+            "client_secret" => self._clientAuth.secret(),
             "code" => authenticationCode,
             "redirect_uri" => "connectiq://oauth",
             "scope" => "read_station"
@@ -229,14 +225,12 @@ class TokensFromCodeEndpoint {
 }
 
 class RefreshAccessTokenEndpoint {
-    private var _clientId as String;
-    private var _clientSecret as String;
+    private var _clientAuth as NetatmoClientAuth;
     private var _handler as TokensHandler?;
     private var _errorHandler as AuthenticationErrorHandler;
 
-    public function initialize(clientId as String, clientSecret as String, errorHandler as AuthenticationErrorHandler) {
-        self._clientId = clientId;
-        self._clientSecret = clientSecret;
+    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as AuthenticationErrorHandler) {
+        self._clientAuth = clientAuth;
         self._errorHandler = errorHandler;
     }
 
@@ -251,8 +245,8 @@ class RefreshAccessTokenEndpoint {
         var params = {
             "grant_type" => "refresh_token",
             "refresh_token" => refreshToken,
-            "client_id" => self._clientId,
-            "client_secret" => self._clientSecret,
+            "client_id" => self._clientAuth.id(),
+            "client_secret" => self._clientAuth.secret(),
             "redirect_uri" => "connectiq://oauth",
             "scope" => "read_station"
         };

@@ -15,6 +15,16 @@ class NetatmoStationsData {
     public function device(index as Number) as Device {
         return self._devices[index];
     }
+
+    public function allStations() as Array<NetatmoStationData> {
+        var allStations = [] as Array<NetatmoStationData>;
+        for (var i = 0; i<self._devices.size(); i++) {
+            allStations.add(self._devices[i].mainStation());
+            allStations.addAll(self._devices[i].allModules());
+        }
+        return allStations;
+    }
+
 }
 
 class Device {
@@ -36,6 +46,10 @@ class Device {
 
     public function getModule(index as Number) as NetatmoStationData {
         return self._modules[index];
+    }
+
+    public function allModules() as Array<NetatmoStationData> {
+        return self._modules; // TODO return copy
     }
 
 }

@@ -8,10 +8,9 @@ class NetatmoAdapter {
     private var _retriever as NetatmoDataRetriever;
     private var _dataConsumer as DataConsumer;
 
-    public function initialize(client_id as String, client_secret as String, dataConsumer as DataConsumer) {
+    public function initialize(netatmoClientAuth as NetatmoClientAuth, dataConsumer as DataConsumer) {
         self._dataConsumer = dataConsumer;
-
-        self._authenticator = new NetatmoAuthenticator(client_id, client_secret, method(:loadDataGivenToken));
+        self._authenticator = new NetatmoAuthenticator(netatmoClientAuth, method(:loadDataGivenToken));
         self._retriever = new NetatmoDataRetriever(method(:returnLoadedData));
     }
 

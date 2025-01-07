@@ -5,19 +5,26 @@ class GarminNetatmoWidgetGlanceView extends Ui.GlanceView {
     
     private var _data as NetatmoStationData?;
     private var _error as NetatmoError?;
+    private var _dataLoader as DataLoader;
 
-    public function initialize() {
-      GlanceView.initialize();
+    public function initialize(dataLoader as DataLoader) {
+        GlanceView.initialize();
+        self._dataLoader = dataLoader;
     }
 
-    public function setData(data as NetatmoStationData) as Void {
-        self._data = data;
+    public function onShow() as Void {
+        self._dataLoader.invoke(method(:onDataLoaded));
+    }
+
+    public function onDataLoaded(data as NetatmoStationsData?, error as NetatmoError?) as Void {
+        if (error != null) {
+            self._error = error;
+        } else if (data != null && data.numberOfDevices() > 0) {
+            self._data = data.device(0).mainStation();
+        } else {
+           self._error = new NetatmoError("No data");
+        }
         WatchUi.requestUpdate();    
-    }
-
-    public function setError(error as NetatmoError) as Void {
-        self._error = error;
-        WatchUi.requestUpdate();
     }
 
     public function onUpdate(dc) {

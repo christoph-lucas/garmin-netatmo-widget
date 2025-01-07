@@ -5,34 +5,36 @@ class GarminNetatmoWidgetView extends WatchUi.View {
 
     private var _data as NetatmoStationData?;
     private var _error as NetatmoError?;
+    private var _dataLoader as DataLoader;
 
-    function initialize() {
+    function initialize(dataLoader as DataLoader) {
         View.initialize();
+        self._dataLoader = dataLoader;
     }
 
-    public function setData(data as NetatmoStationData) as Void {
-        self._data = data;
-        WatchUi.requestUpdate();
-    }
-
-    public function setError(error as NetatmoError) as Void {
-        self._error = error;
-        WatchUi.requestUpdate();
-    }
-
-    // Load your resources here
-    function onLayout(dc as Dc) as Void {
-    }
+    function onLayout(dc as Dc) as Void { }
 
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
+        self._dataLoader.invoke(method(:onDataLoaded));
     }
 
-    // Update the view
+    public function onDataLoaded(data as NetatmoStationsData?, error as NetatmoError?) as Void {
+        if (error != null) {
+           self._error = error;
+            WatchUi.requestUpdate();
+        } else if (data != null) {
+            var loop = new ViewLoop(new NetatmoStationsViewFactory(data), null);
+            WatchUi.switchToView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);        
+        } else {
+           self._error = new NetatmoError("No data");
+            WatchUi.requestUpdate();
+        }
+    }
+
     function onUpdate(dc as Dc) as Void {
-        // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
         dc.clear();
@@ -44,14 +46,12 @@ class GarminNetatmoWidgetView extends WatchUi.View {
         } else {
             self._drawLoading(dc);
         }
-
     }
 
     // Called when this View is removed from the screen. Save the
     // state of this View here. This includes freeing resources from
     // memory.
-    function onHide() as Void {
-    }
+    function onHide() as Void { }
 
     private function _drawError(dc as Dc, error as NetatmoError) as Void {
         var errorTextArea = new WatchUi.TextArea({

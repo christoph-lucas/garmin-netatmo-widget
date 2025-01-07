@@ -3,51 +3,39 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
 
+typedef DataLoader as Method(handler as DataConsumer) as Void;
+
 class GarminNetatmoWidgetApp extends Application.AppBase {
 
-    private var _netatmo as NetatmoAdapter;
+    private var _netatmoClientAuth as NetatmoClientAuth;
     private var _initialView as GarminNetatmoWidgetView;
     private var _glanceView as GarminNetatmoWidgetGlanceView;
 
-    function initialize() {
+    public function initialize() {
         AppBase.initialize();
-        var netatmoClientAuth = Application.loadResource(Rez.JsonData.netatmoClientAuth) as Dictionary<String, String>;
-        self._netatmo = new NetatmoAdapter(netatmoClientAuth["id"], netatmoClientAuth["secret"], method(:onDataLoaded));
-        self._initialView = new GarminNetatmoWidgetView();
-        self._glanceView = new GarminNetatmoWidgetGlanceView();
+        var netatmoClientAuthRaw = Application.loadResource(Rez.JsonData.netatmoClientAuth) as Dictionary<String, String>;
+        self._netatmoClientAuth = new NetatmoClientAuth(netatmoClientAuthRaw["id"], netatmoClientAuthRaw["secret"]);
+        self._initialView = new GarminNetatmoWidgetView(method(:loadData));
+        self._glanceView = new GarminNetatmoWidgetGlanceView(method(:loadData));
     }
 
-    // onStart() is called on application start up
-    function onStart(state as Dictionary?) as Void {
-        self._netatmo.loadStationData();
-    }
+    public function onStart(state as Dictionary?) as Void { }
 
-    // onStop() is called when your application is exiting
-    function onStop(state as Dictionary?) as Void {
-    }
+    public function onStop(state as Dictionary?) as Void { }
 
-    function getInitialView() as [Views] or [Views, InputDelegates] {
+    public function getInitialView() as [Views] or [Views, InputDelegates] {
         return [ self._initialView ];
     }
 
-    function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {
+    public function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {
         // https://developer.garmin.com/connect-iq/api-docs/Toybox/Application/AppBase.html#getGlanceView-instance_function
         return [ self._glanceView ];
     }
 
-    public function onDataLoaded(data as NetatmoStationsData?, error as NetatmoError?) as Void {
-        if (error != null) {
-           self._initialView.setError(error);
-           self._glanceView.setError(error);
-        } else if (data != null && data.numberOfDevices() > 0) {
-            var mainStation = data.device(0).mainStation();
-            self._initialView.setData(mainStation);
-            self._glanceView.setData(mainStation);
-        } else {
-           self._initialView.setError(new NetatmoError("No data"));
-           self._glanceView.setError(new NetatmoError("No data"));
-        }
+    public function loadData(handler as DataConsumer) as Void {
+        new NetatmoAdapter(self._netatmoClientAuth, handler).loadStationData();
     }
+
 }
 
 function getApp() as GarminNetatmoWidgetApp {
