@@ -61,7 +61,8 @@ class GarminNetatmoWidgetView extends WatchUi.View {
             :locX => WatchUi.LAYOUT_HALIGN_CENTER,
             :locY=> WatchUi.LAYOUT_VALIGN_CENTER,
             :width => dc.getWidth(),
-            :height => dc.getHeight()
+            :height => dc.getHeight(),
+            :justification => Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         });
         errorTextArea.draw(dc);
     }

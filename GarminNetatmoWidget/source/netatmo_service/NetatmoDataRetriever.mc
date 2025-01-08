@@ -70,7 +70,9 @@ class StationsDataEndpoint {
         } else {
             var typedData = data as Dictionary<String, Dictionary<String, String or Number>>;
             var error = typedData["error"];
-            self._errorHandler.invoke(new NetatmoError("onReceiveHomesData: Response code " + responseCode + ", error: " + error));
+            var error_code = error["code"] as Number;
+            var error_msg = error["message"] as String;
+            self._errorHandler.invoke(new NetatmoError("StationsData: " + responseCode + " " + error_msg + " (" + error_code + ")"));
         }
     }
 

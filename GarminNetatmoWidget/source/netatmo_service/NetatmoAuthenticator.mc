@@ -12,6 +12,7 @@ using Toybox.Time;
 
 const OAUTH_CODE = "netatmoOAuthCode";
 const OAUTH_ERROR = "netatmoOAuthError";
+const OAUTH_ERROR_DESC = "netatmoOAuthErrorDesc";
 const OAUTH_STATE = "netatmoOAuthState"; // FIXME implement for additional security against CSRF
 
 typedef AccessTokenConsumer as Method(accessToken as String?, error as NetatmoError?) as Void;
@@ -143,7 +144,7 @@ class AuthenticationEndpoint {
             // From the description above it seems to be the same and this value works
             "connectiq://oauth", 
             Authentication.OAUTH_RESULT_TYPE_URL,
-            {"state" => $.OAUTH_STATE, "code" => $.OAUTH_CODE, "error" => $.OAUTH_ERROR}
+            {"state" => $.OAUTH_STATE, "code" => $.OAUTH_CODE, "error" => $.OAUTH_ERROR, "error_description" => $.OAUTH_ERROR_DESC}
         );        
     }
 
@@ -154,13 +155,14 @@ class AuthenticationEndpoint {
             var data = message.data as Dictionary<String, String>;
             var error = data[$.OAUTH_ERROR];
             if (notEmpty(error)) {
-                self._errorHandler.invoke(new NetatmoError("onOAuthMessage: " + error));
+                var error_desc = data[$.OAUTH_ERROR_DESC];
+                self._errorHandler.invoke(new NetatmoError("Authorize: " + error + ": " + error_desc));
                 return;
             }
             var code = data[$.OAUTH_CODE];
             self._handler.invoke(code);
         } else {
-            self._errorHandler.invoke(new NetatmoError("onOAuthMessage: Data is missing in OAuth Return Message!"));
+            self._errorHandler.invoke(new NetatmoError("Authorize: Data missing."));
         }
     }
 
@@ -212,14 +214,16 @@ class TokensFromCodeEndpoint {
 
     // STEP 1c
     public function onReceiveTokens(responseCode as Number, data as Dictionary or String or Null) as Void {
+        var typedData = data as Dictionary<String, String>;
         if (responseCode == 200) {
-            var typedData = data as Dictionary<String, String>;
             var refresh_token = typedData["refresh_token"];
             var accessToken = typedData["access_token"];
             var expires_in = typedData["expires_in"] as Number;
             self._handler.invoke(refresh_token, accessToken, expires_in);
         } else {
-            self._errorHandler.invoke(new NetatmoError("onReceiveTokens: Response code " + responseCode));
+            var error = typedData["error"];
+            var desc = typedData["error_description"];
+            self._errorHandler.invoke(new NetatmoError("Tokens: " + responseCode + " " + error + ": " + desc));
         }
     }
 }
@@ -268,14 +272,16 @@ class RefreshAccessTokenEndpoint {
     }
 
     public function onReceiveTokens(responseCode as Number, data as Dictionary or String or Null) as Void {
+        var typedData = data as Dictionary<String, String>;
         if (responseCode == 200) {
-            var typedData = data as Dictionary<String, String>;
             var refresh_token = typedData["refresh_token"];
             var accessToken = typedData["access_token"];
             var expires_in = typedData["expires_in"] as Number;
             self._handler.invoke(refresh_token, accessToken, expires_in);
         } else {
-            self._errorHandler.invoke(new NetatmoError("onReceiveTokens: Response code " + responseCode));
+            var error = typedData["error"];
+            var desc = typedData["error_description"];
+            self._errorHandler.invoke(new NetatmoError("Tokens: " + responseCode + " " + error + ": " + desc));
         }
     }
 }
