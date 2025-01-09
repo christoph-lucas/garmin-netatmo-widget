@@ -31,10 +31,6 @@ class NetatmoAuthenticator {
         self._notificationConsumer = notificationConsumer;
     }
 
-    public function errorHandler(error as NetatmoError) as Void {
-        self._notificationConsumer.invoke(error);
-    }
-
     //! Requesting an Access Token triggers a series of async operations, where each operation might or might not be necessary.
     //! Unfortunately, I could not find a nice way to chain these operations in an intention revealing way.
     //! Step 1: Ensure Authentication: If refresh token is missing (sync check)
@@ -57,14 +53,14 @@ class NetatmoAuthenticator {
             self._ensureAccessTokenValidity();
         } else {
             self._notificationConsumer.invoke(new Status("Authorizing, check phone."));
-            new AuthenticationEndpoint(self._clientAuth, method(:errorHandler)).callAndThen(method(:_getTokensFrom));
+            new AuthenticationEndpoint(self._clientAuth, self._notificationConsumer).callAndThen(method(:_getTokensFrom));
         }
     }
 
     // STEP 1b
     public function _getTokensFrom(authenticationCode as String) as Void {
         self._notificationConsumer.invoke(new Status("Auth code received, get tokens."));
-        new TokensFromCodeEndpoint(self._clientAuth, method(:errorHandler))
+        new TokensFromCodeEndpoint(self._clientAuth, self._notificationConsumer)
             .callAndThen(authenticationCode, method(:_receiveTokens));
     }
 
@@ -83,7 +79,7 @@ class NetatmoAuthenticator {
         }
         self._notificationConsumer.invoke(new Status("Refreshing access token."));
         var refreshToken = Storage.getValue(REFRESH_TOKEN);
-        new RefreshAccessTokenEndpoint(self._clientAuth, method(:errorHandler))
+        new RefreshAccessTokenEndpoint(self._clientAuth, self._notificationConsumer)
             .callAndThen(refreshToken, method(:_receiveTokens));
     }
 
