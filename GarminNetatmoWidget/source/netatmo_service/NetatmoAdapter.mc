@@ -14,7 +14,7 @@ class NetatmoAdapter {
     public function initialize(clientAuth as NetatmoClientAuth, dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) {
         self._dataConsumer = dataConsumer;
         self._notificationConsumer = notificationConsumer;
-        self._authenticator = new NetatmoAuthenticator(clientAuth, method(:loadDataGivenToken));
+        self._authenticator = new NetatmoAuthenticator(clientAuth, method(:loadDataGivenToken), notificationConsumer);
         self._retriever = new NetatmoDataRetriever(method(:returnLoadedData));
     }
 
@@ -23,17 +23,13 @@ class NetatmoAdapter {
             self._notificationConsumer.invoke(new Status("No connection"));
             return;
         }
+        self._notificationConsumer.invoke(new Status("Authenticating..."));
         self._authenticator.requestAccessToken();
     }
 
-    public function loadDataGivenToken(accessToken as String?, error as NetatmoError?) as Void {
-        if (error != null) {
-            self._notificationConsumer.invoke(error);
-        } else if (accessToken != null) {
-            self._retriever.loadData(accessToken);
-        } else {
-            self._notificationConsumer.invoke(new NetatmoError("loadDataGivenToken: Neither Access Token nor Error given."));
-        }
+    public function loadDataGivenToken(accessToken as String) as Void {
+        self._notificationConsumer.invoke(new Status("Loading..."));
+        self._retriever.loadData(accessToken);
     }
 
     public function returnLoadedData(data as NetatmoStationsData?, error as NetatmoError?) as Void {

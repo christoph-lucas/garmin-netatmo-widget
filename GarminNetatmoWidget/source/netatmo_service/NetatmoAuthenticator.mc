@@ -15,7 +15,7 @@ const OAUTH_ERROR = "netatmoOAuthError";
 const OAUTH_ERROR_DESC = "netatmoOAuthErrorDesc";
 const OAUTH_STATE = "netatmoOAuthState"; // FIXME implement for additional security against CSRF
 
-typedef AccessTokenConsumer as Method(accessToken as String?, error as NetatmoError?) as Void;
+typedef AccessTokenConsumer as Method(accessToken as String) as Void;
 typedef AuthenticationErrorHandler as Method(error as NetatmoError) as Void;
 typedef AuthenticationCodeHandler as Method(authenticationCode as String) as Void;
 typedef TokensHandler as Method(refresh_token as String, accessToken as String, expiresIn as Number) as Void;
@@ -24,14 +24,16 @@ class NetatmoAuthenticator {
 
     private var _clientAuth as NetatmoClientAuth;
     private var _accessTokenConsumer as AccessTokenConsumer;
+    private var _notificationConsumer as NotificationConsumer;
 
-    public function initialize(netatmoClientAuth as NetatmoClientAuth, accessTokenConsumer as AccessTokenConsumer) {
+    public function initialize(netatmoClientAuth as NetatmoClientAuth, accessTokenConsumer as AccessTokenConsumer, notificationConsumer as NotificationConsumer) {
         self._clientAuth = netatmoClientAuth;
         self._accessTokenConsumer = accessTokenConsumer;
+        self._notificationConsumer = notificationConsumer;
     }
 
     public function errorHandler(error as NetatmoError) as Void {
-        self._accessTokenConsumer.invoke(null, error);
+        self._notificationConsumer.invoke(error);
     }
 
     //! Requesting an Access Token triggers a series of async operations, where each operation might or might not be necessary.
@@ -55,29 +57,32 @@ class NetatmoAuthenticator {
         if (notEmpty(refreshToken)) {
             self._ensureAccessTokenValidity();
         } else {
+            self._notificationConsumer.invoke(new Status("Authorizing, check phone."));
             new AuthenticationEndpoint(self._clientAuth, method(:errorHandler)).callAndThen(method(:_getTokensFrom));
         }
     }
 
     // STEP 1b
     public function _getTokensFrom(authenticationCode as String) as Void {
+        self._notificationConsumer.invoke(new Status("Auth code received, get tokens."));
         new TokensFromCodeEndpoint(self._clientAuth, method(:errorHandler))
             .callAndThen(authenticationCode, method(:_receiveTokens));
     }
 
     // STEP 2
     private function _ensureAccessTokenValidity() as Void {
-            var accessTokenValidUntilRaw = Storage.getValue(ACCESS_TOKEN_VALID_UNTIL);
+        var accessTokenValidUntilRaw = Storage.getValue(ACCESS_TOKEN_VALID_UNTIL);
         if (accessTokenValidUntilRaw != null) {
             var accessTokenValidUntil = new Time.Moment(accessTokenValidUntilRaw);
             if (Time.now().lessThan(accessTokenValidUntil)) {
                 var accessToken = Storage.getValue(ACCESS_TOKEN);
                 if (notEmpty(accessToken)) {
-                    self._accessTokenConsumer.invoke(accessToken, null);
+                    self._accessTokenConsumer.invoke(accessToken);
                     return;
                 }
             }
         }
+        self._notificationConsumer.invoke(new Status("Refreshing access token."));
         var refreshToken = Storage.getValue(REFRESH_TOKEN);
         new RefreshAccessTokenEndpoint(self._clientAuth, method(:errorHandler))
             .callAndThen(refreshToken, method(:_receiveTokens));
@@ -85,9 +90,10 @@ class NetatmoAuthenticator {
 
     // STEP 1c and 2b
     public function _receiveTokens(refresh_token as String, accessToken as String, expiresIn as Number) as Void {
+        self._notificationConsumer.invoke(new Status("Storing access token."));
         self._storeRefreshToken(refresh_token);
         self._storeAccessToken(accessToken, expiresIn);
-        self._accessTokenConsumer.invoke(accessToken, null);
+        self._accessTokenConsumer.invoke(accessToken);
     }
 
     private function _storeRefreshToken(refreshToken as String) as Void {
