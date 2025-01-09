@@ -65,7 +65,7 @@ class StationsDataEndpoint {
             var error = typedData["error"];
             var error_code = error["code"] as Number;
             var error_msg = error["message"] as String;
-            self._notificationConsumer.invoke(new NetatmoError("StationsData: " + responseCode + " " + error_msg + " (" + error_code + ")"));
+            self._notificationConsumer.invoke(new WebRequestError("StationsData", responseCode, error_msg, error_code));
         }
     }
 

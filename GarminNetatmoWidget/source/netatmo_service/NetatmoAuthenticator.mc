@@ -16,7 +16,6 @@ const OAUTH_ERROR_DESC = "netatmoOAuthErrorDesc";
 const OAUTH_STATE = "netatmoOAuthState"; // FIXME implement for additional security against CSRF
 
 typedef AccessTokenConsumer as Method(accessToken as String) as Void;
-typedef AuthenticationErrorHandler as Method(error as NetatmoError) as Void;
 typedef AuthenticationCodeHandler as Method(authenticationCode as String) as Void;
 typedef TokensHandler as Method(refresh_token as String, accessToken as String, expiresIn as Number) as Void;
 
@@ -115,9 +114,9 @@ class AuthenticationEndpoint {
 
     private var _clientAuth as NetatmoClientAuth;
     private var _handler as AuthenticationCodeHandler?;
-    private var _errorHandler as AuthenticationErrorHandler;
+    private var _errorHandler as NotificationConsumer;
 
-    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as AuthenticationErrorHandler) {
+    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as NotificationConsumer) {
         self._clientAuth = clientAuth;
         self._errorHandler = errorHandler;
     }
@@ -162,13 +161,13 @@ class AuthenticationEndpoint {
             var error = data[$.OAUTH_ERROR];
             if (notEmpty(error)) {
                 var error_desc = data[$.OAUTH_ERROR_DESC];
-                self._errorHandler.invoke(new NetatmoError("Authorize: " + error + ": " + error_desc));
+                self._errorHandler.invoke(new WebRequestError("Authorize", 0, error_desc, error));
                 return;
             }
             var code = data[$.OAUTH_CODE];
             self._handler.invoke(code);
         } else {
-            self._errorHandler.invoke(new NetatmoError("Authorize: Data missing."));
+            self._errorHandler.invoke(new WebRequestError("Authorize", 0, "Data missing.", ""));
         }
     }
 
@@ -177,9 +176,9 @@ class AuthenticationEndpoint {
 class TokensFromCodeEndpoint {
     private var _clientAuth as NetatmoClientAuth;
     private var _handler as TokensHandler?;
-    private var _errorHandler as AuthenticationErrorHandler;
+    private var _errorHandler as NotificationConsumer;
 
-    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as AuthenticationErrorHandler) {
+    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as NotificationConsumer) {
         self._clientAuth = clientAuth;
         self._errorHandler = errorHandler;
     }
@@ -229,7 +228,7 @@ class TokensFromCodeEndpoint {
         } else {
             var error = typedData["error"];
             var desc = typedData["error_description"];
-            self._errorHandler.invoke(new NetatmoError("Tokens: " + responseCode + " " + error + ": " + desc));
+            self._errorHandler.invoke(new WebRequestError("Tokens", responseCode, desc, error));
         }
     }
 }
@@ -237,9 +236,9 @@ class TokensFromCodeEndpoint {
 class RefreshAccessTokenEndpoint {
     private var _clientAuth as NetatmoClientAuth;
     private var _handler as TokensHandler?;
-    private var _errorHandler as AuthenticationErrorHandler;
+    private var _errorHandler as NotificationConsumer;
 
-    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as AuthenticationErrorHandler) {
+    public function initialize(clientAuth as NetatmoClientAuth, errorHandler as NotificationConsumer) {
         self._clientAuth = clientAuth;
         self._errorHandler = errorHandler;
     }
@@ -287,7 +286,7 @@ class RefreshAccessTokenEndpoint {
         } else {
             var error = typedData["error"];
             var desc = typedData["error_description"];
-            self._errorHandler.invoke(new NetatmoError("Tokens: " + responseCode + " " + error + ": " + desc));
+            self._errorHandler.invoke(new WebRequestError("Tokens", responseCode, desc, error));
         }
     }
 }
