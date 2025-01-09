@@ -1,4 +1,5 @@
 import Toybox.Lang;
+import Toybox.System;
 
 typedef DataConsumer as Method(data as NetatmoStationsData) as Void;
 typedef NotificationConsumer as Method(notification as Notification) as Void;
@@ -18,6 +19,10 @@ class NetatmoAdapter {
     }
 
     public function loadStationData() as Void {
+        if (!System.getDeviceSettings().connectionAvailable) {
+            self._notificationConsumer.invoke(new Status("No connection"));
+            return;
+        }
         self._authenticator.requestAccessToken();
     }
 
