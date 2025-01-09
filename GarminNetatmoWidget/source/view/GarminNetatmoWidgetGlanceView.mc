@@ -13,13 +13,11 @@ class GarminNetatmoWidgetGlanceView extends Ui.GlanceView {
     }
 
     public function onShow() as Void {
-        self._dataLoader.invoke(method(:onDataLoaded));
+        self._dataLoader.invoke(method(:onDataLoaded), method(:onNotification));
     }
 
-    public function onDataLoaded(data as NetatmoStationsData?, error as NetatmoError?) as Void {
-        if (error != null) {
-            self._notification = error;
-        } else if (data != null && data.numberOfDevices() > 0) {
+    public function onDataLoaded(data as NetatmoStationsData) as Void {
+        if (data.numberOfDevices() > 0) {
             self._data = data.device(0).mainStation();
         } else {
            self._notification = new NetatmoError("No data");

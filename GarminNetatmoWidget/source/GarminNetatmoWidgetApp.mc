@@ -3,7 +3,7 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 import Toybox.System;
 
-typedef DataLoader as Method(handler as DataConsumer) as Void;
+typedef DataLoader as Method(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void;
 
 class GarminNetatmoWidgetApp extends Application.AppBase {
 
@@ -32,8 +32,8 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
         return [ self._glanceView ];
     }
 
-    public function loadData(handler as DataConsumer) as Void {
-        new NetatmoAdapter(self._netatmoClientAuth, handler).loadStationData();
+    public function loadData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
+        new NetatmoAdapter(self._netatmoClientAuth, dataConsumer, notificationConsumer).loadStationData();
     }
 
 }

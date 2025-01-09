@@ -3,7 +3,6 @@ import Toybox.WatchUi;
 
 class GarminNetatmoWidgetView extends WatchUi.View {
 
-    private var _data as NetatmoStationData?;
     private var _notification as Notification?;
     private var _dataLoader as DataLoader;
 
@@ -18,20 +17,12 @@ class GarminNetatmoWidgetView extends WatchUi.View {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
-        self._dataLoader.invoke(method(:onDataLoaded));
+        self._dataLoader.invoke(method(:onDataLoaded), method(:onNotification));
     }
 
-    public function onDataLoaded(data as NetatmoStationsData?, error as NetatmoError?) as Void {
-        if (error != null) {
-           self._notification = error;
-            WatchUi.requestUpdate();
-        } else if (data != null) {
-            var loop = new ViewLoop(new NetatmoStationsViewFactory(data), null);
-            WatchUi.switchToView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);        
-        } else {
-           self._notification = new NetatmoError("No data");
-            WatchUi.requestUpdate();
-        }
+    public function onDataLoaded(data as NetatmoStationsData) as Void {
+        var loop = new ViewLoop(new NetatmoStationsViewFactory(data), null);
+        WatchUi.switchToView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);        
     }
 
     public function onNotification(notification as Notification) as Void {
@@ -44,9 +35,7 @@ class GarminNetatmoWidgetView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
         dc.clear();
 
-        if (self._data != null) {
-            NetatmoStationDrawer.draw(dc, self._data);
-        } else if (self._notification != null) {
+        if (self._notification != null) {
             self._drawNotification(dc, self._notification);
         } else {
             self._drawStarting(dc);
