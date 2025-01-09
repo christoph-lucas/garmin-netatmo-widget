@@ -2,30 +2,22 @@ import Toybox.Lang;
 import Toybox.Time;
 
 typedef StationsDataConsumer as Method(data as NetatmoStationsData) as Void;
-typedef RetrievedDataConsumer as Method(data as NetatmoStationsData?, error as NetatmoError?) as Void;
-typedef StationsErrorHandler as Method(error as NetatmoError) as Void;
 
 class NetatmoDataRetriever {
 
     // FIXME cache retrieved data from netatmo for e.g. 5 minutes in persistent storage
 
-    private var _dataConsumer as RetrievedDataConsumer;
+    private var _dataConsumer as StationsDataConsumer;
+    private var _notificationConsumer as NotificationConsumer;
 
-    public function initialize(dataConsumer as RetrievedDataConsumer) {
+    public function initialize(dataConsumer as StationsDataConsumer, notificationConsumer as NotificationConsumer) {
         self._dataConsumer = dataConsumer;
+        self._notificationConsumer = notificationConsumer;
     }
 
     public function loadData(accessToken as String) as Void {
-        new StationsDataEndpoint(accessToken, method(:errorHandler))
-            .callAndThen(method(:processHomesData));
-    }
-
-    public function processHomesData(data as NetatmoStationsData) as Void {
-        self._dataConsumer.invoke(data, null);
-    }
-
-    public function errorHandler(error as NetatmoError) as Void {
-        self._dataConsumer.invoke(null, error);
+        new StationsDataEndpoint(accessToken, self._notificationConsumer)
+            .callAndThen(self._dataConsumer);
     }
 
 }
@@ -34,11 +26,11 @@ class NetatmoDataRetriever {
 class StationsDataEndpoint {
     private var _accessToken as String;
     private var _handler as StationsDataConsumer?;
-    private var _errorHandler as StationsErrorHandler;
+    private var _notificationConsumer as NotificationConsumer;
 
-    public function initialize(accessToken as String, errorHandler as StationsErrorHandler) {
+    public function initialize(accessToken as String, notificationConsumer as NotificationConsumer) {
         self._accessToken = accessToken;
-        self._errorHandler = errorHandler;
+        self._notificationConsumer = notificationConsumer;
     }
 
     public function callAndThen(homesDataHandler as StationsDataConsumer) {
@@ -66,13 +58,14 @@ class StationsDataEndpoint {
 
     public function onReceiveHomesData(responseCode as Number, data as Dictionary or String or Null) as Void {
         if (responseCode == 200) {
+            self._notificationConsumer.invoke(new Status("Data received, processing..."));
             self._handler.invoke(self._mapResponseToMainStationData(data));
         } else {
             var typedData = data as Dictionary<String, Dictionary<String, String or Number>>;
             var error = typedData["error"];
             var error_code = error["code"] as Number;
             var error_msg = error["message"] as String;
-            self._errorHandler.invoke(new NetatmoError("StationsData: " + responseCode + " " + error_msg + " (" + error_code + ")"));
+            self._notificationConsumer.invoke(new NetatmoError("StationsData: " + responseCode + " " + error_msg + " (" + error_code + ")"));
         }
     }
 
