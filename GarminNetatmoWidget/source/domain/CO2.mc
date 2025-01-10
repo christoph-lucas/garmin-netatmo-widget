@@ -8,7 +8,10 @@ class CO2 {
     }
 
     public function toShortString() as String {
-        return self._value + "ppm";
+        if (self._value != null) {
+            return self._value + "ppm";
+        }
+        return "n/a";
     }
 
     public function toLongString() as String {

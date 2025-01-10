@@ -8,7 +8,10 @@ class Temperature {
     }
 
     public function toShortString() as String {
-        return self._value.format("%.1f") + "°C";
+        if (self._value != null) {
+            return self._value.format("%.1f") + "°C";
+        }
+        return "n/a";
     }
 
     public function toLongString() as String {
