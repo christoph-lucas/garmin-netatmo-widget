@@ -21,8 +21,8 @@ class GarminNetatmoWidgetView extends WatchUi.View {
     }
 
     public function onDataLoaded(data as NetatmoStationsData) as Void {
-        var loop = new ViewLoop(new NetatmoStationsViewFactory(data), null);
-        WatchUi.switchToView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);        
+        var loop = new ViewLoop(new NetatmoStationsViewFactory(data, self._service), null);
+        WatchUi.pushView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);        
     }
 
     public function onNotification(notification as Notification) as Void {
