@@ -4,11 +4,11 @@ import Toybox.WatchUi;
 class GarminNetatmoWidgetView extends WatchUi.View {
 
     private var _notification as Notification?;
-    private var _dataLoader as DataLoader;
+    private var _service as NetatmoService;
 
-    function initialize(dataLoader as DataLoader) {
+    function initialize(service as NetatmoService) {
         View.initialize();
-        self._dataLoader = dataLoader;
+        self._service = service;
     }
 
     function onLayout(dc as Dc) as Void { }
@@ -17,7 +17,7 @@ class GarminNetatmoWidgetView extends WatchUi.View {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
-        self._dataLoader.invoke(method(:onDataLoaded), method(:onNotification));
+        self._service.loadStationData(method(:onDataLoaded), method(:onNotification));
     }
 
     public function onDataLoaded(data as NetatmoStationsData) as Void {

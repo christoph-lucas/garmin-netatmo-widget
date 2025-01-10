@@ -7,16 +7,17 @@ typedef DataLoader as Method(dataConsumer as DataConsumer, notificationConsumer 
 
 class GarminNetatmoWidgetApp extends Application.AppBase {
 
-    private var _netatmoClientAuth as NetatmoClientAuth;
     private var _initialView as GarminNetatmoWidgetView;
     private var _glanceView as GarminNetatmoWidgetGlanceView;
 
     public function initialize() {
         AppBase.initialize();
         var netatmoClientAuthRaw = Application.loadResource(Rez.JsonData.netatmoClientAuth) as Dictionary<String, String>;
-        self._netatmoClientAuth = new NetatmoClientAuth(netatmoClientAuthRaw["id"], netatmoClientAuthRaw["secret"]);
-        self._initialView = new GarminNetatmoWidgetView(method(:loadData));
-        self._glanceView = new GarminNetatmoWidgetGlanceView(method(:loadData));
+        var netatmoClientAuth = new NetatmoClientAuth(netatmoClientAuthRaw["id"], netatmoClientAuthRaw["secret"]);
+
+        var service = new NetatmoService(netatmoClientAuth);
+        self._initialView = new GarminNetatmoWidgetView(service);
+        self._glanceView = new GarminNetatmoWidgetGlanceView(service);
     }
 
     public function onStart(state as Dictionary?) as Void { }
@@ -30,10 +31,6 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
     public function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {
         // https://developer.garmin.com/connect-iq/api-docs/Toybox/Application/AppBase.html#getGlanceView-instance_function
         return [ self._glanceView ];
-    }
-
-    public function loadData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
-        new NetatmoAdapter(self._netatmoClientAuth, dataConsumer, notificationConsumer).loadStationData();
     }
 
 }

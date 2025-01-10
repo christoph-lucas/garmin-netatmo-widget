@@ -5,15 +5,15 @@ class GarminNetatmoWidgetGlanceView extends Ui.GlanceView {
     
     private var _data as NetatmoStationData?;
     private var _notification as Notification?;
-    private var _dataLoader as DataLoader;
+    private var _service as NetatmoService;
 
-    public function initialize(dataLoader as DataLoader) {
+    public function initialize(service as NetatmoService) {
         GlanceView.initialize();
-        self._dataLoader = dataLoader;
+        self._service = service;
     }
 
     public function onShow() as Void {
-        self._dataLoader.invoke(method(:onDataLoaded), method(:onNotification));
+        self._service.loadStationData(method(:onDataLoaded), method(:onNotification));
     }
 
     public function onDataLoaded(data as NetatmoStationsData) as Void {
