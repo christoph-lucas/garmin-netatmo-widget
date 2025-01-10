@@ -1,7 +1,7 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 
-class GarminNetatmoWidgetView extends WatchUi.View {
+class InitialView extends WatchUi.View {
 
     private var _notification as Notification?;
     private var _service as NetatmoService;

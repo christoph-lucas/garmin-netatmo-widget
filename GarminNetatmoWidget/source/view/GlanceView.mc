@@ -1,7 +1,7 @@
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 
-class GarminNetatmoWidgetGlanceView extends Ui.GlanceView {
+class GlanceView extends Ui.GlanceView {
     
     private var _data as NetatmoStationData?;
     private var _notification as Notification?;
