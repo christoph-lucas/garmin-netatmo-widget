@@ -8,6 +8,7 @@ typedef DataLoader as Method(dataConsumer as DataConsumer, notificationConsumer 
 class GarminNetatmoWidgetApp extends Application.AppBase {
 
     private var _initialView as InitialView;
+    private var _initialViewDelegate as InitialViewDelegate;
     private var _glanceView as GlanceView;
 
     public function initialize() {
@@ -17,6 +18,7 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
 
         var service = new NetatmoService(netatmoClientAuth);
         self._initialView = new InitialView(service);
+        self._initialViewDelegate = new InitialViewDelegate(service);
         self._glanceView = new GlanceView(service);
     }
 
@@ -25,7 +27,7 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
     public function onStop(state as Dictionary?) as Void { }
 
     public function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [ self._initialView ];
+        return [ self._initialView, self._initialViewDelegate ];
     }
 
     public function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {

@@ -43,7 +43,7 @@ class StationsViewDelegate extends BehaviorDelegate {
 
         menu.addItem(new WatchUi.MenuItem("Reload", "Reload stations data.", "reload", null));
         menu.addItem(new WatchUi.MenuItem("Reauth", "Reauthenticate with Netatmo.", "reauth", null));
-        WatchUi.pushView(menu, new StationsViewMenuDelegate(method(:onMenuItemSelected)), WatchUi.SLIDE_UP);
+        WatchUi.pushView(menu, new GenericMenuDelegate(method(:onMenuItemSelected)), WatchUi.SLIDE_UP);
         return true;
     }
 
@@ -69,22 +69,4 @@ class StationsViewDelegate extends BehaviorDelegate {
         }
 
     }
-}
-
-class StationsViewMenuDelegate extends WatchUi.Menu2InputDelegate {
-    private var _selectCallback as Method(item as MenuItem) as Void;
-
-    function initialize(selectCallback as Method(item as MenuItem) as Void) {
-        Menu2InputDelegate.initialize();
-        self._selectCallback = selectCallback;
-    }
-
-    function onSelect(item as MenuItem) as Void {
-        self._selectCallback.invoke(item);
-    }
-
-    public function onBack() as Void {
-        WatchUi.popView(WatchUi.SLIDE_DOWN);
-    }
-
 }
