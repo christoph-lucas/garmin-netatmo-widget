@@ -1,9 +1,9 @@
 import Toybox.Lang;
 
 class Temperature {
-    private var _value as Float;
+    private var _value as Float?;
 
-    public function initialize(value as Float) {
+    public function initialize(value as Float?) {
         self._value = value;
     }
 

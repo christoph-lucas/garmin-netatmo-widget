@@ -1,9 +1,9 @@
 import Toybox.Lang;
 
 class CO2 {
-    private var _value as Number;
+    private var _value as Number?;
 
-    public function initialize(value as Number) {
+    public function initialize(value as Number?) {
         self._value = value;
     }
 

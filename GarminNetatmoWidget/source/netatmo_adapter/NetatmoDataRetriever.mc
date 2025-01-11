@@ -99,15 +99,19 @@ class StationsDataEndpoint {
 
     private function _mapToNetatmoStationData(dict as Dictionary<String, String or Number or Dictionary>) as NetatmoStationData {
         // the device and each module share the same structure in the response
-        var dashboardData = dict["dashboard_data"] as Dictionary;
+        var dashboardData = dict["dashboard_data"] as Dictionary?;
 
         // NB: if a value is missing in the dict, it will be null, even after applying some constructor, i.e. `CO2(null) == null`
         var name = dict["module_name"] as String;
-        var measurementTimestamp = dashboardData["time_utc"] as Number;
-        var temp = dashboardData["Temperature"] as Float;
-        var co2 = dashboardData["CO2"] as Number;
-
-        return new NetatmoStationData(name, new Moment(measurementTimestamp), new Temperature(temp), new CO2(co2));
+        if (dashboardData != null) {
+            var measurementTimestamp = dashboardData["time_utc"] as Number;
+            var temp = dashboardData["Temperature"] as Float;
+            var co2 = dashboardData["CO2"] as Number;
+            return new NetatmoStationData(name, new Moment(measurementTimestamp), new Temperature(temp), new CO2(co2));
+        }
+        // if station is not connected, there is no dashboard data
+        // FIXME handle more gracefully
+        return new NetatmoStationData(name, new Moment(0), new Temperature(null), new CO2(null));
     }
 
 }
