@@ -1,7 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 
-class InitialViewDelegate extends BehaviorDelegate {
+class LoadingViewDelegate extends BehaviorDelegate {
     // see https://forums.garmin.com/developer/connect-iq/f/discussion/371941/switching-between-views
     // some Delegate is needed in the getView() call above, otherwise an Array out of Bounds error is thrown
 
