@@ -8,60 +8,40 @@ function navigateToStationsDataView(data as NetatmoStationsData, service as Neta
 
 class NetatmoStationsViewFactory extends ViewLoopFactory {
 
-    private var _allViews as Array<StationView>;
-    private var _service as NetatmoService;
+    private var _allLoopItems as Array<LoopItem>;
 
     public function initialize(stationsData as NetatmoStationsData, service as NetatmoService) {
         ViewLoopFactory.initialize();
 
-        self._service = service;
-
         var allStations = stationsData.allStations();
-        self._allViews = new[allStations.size()] as Array<StationView>;
+        self._allLoopItems = new[allStations.size()] as Array<LoopItem>;
         for (var i = 0; i < allStations.size(); i++) {
-            self._allViews[i] = new StationView(allStations[i]);
+            self._allLoopItems[i] = new LoopItem(allStations[i], service);
         }
     }
 
     public function getSize() as Number {
-        return self._allViews.size();
+        return self._allLoopItems.size();
     }
 
     public function getView(page as Number) as [ View ] or [ View, BehaviorDelegate ]  {
-        return [self._allViews[page], new StationsViewDelegate(self._service)];
+        var loopItem = self._allLoopItems[page];
+        return [loopItem.view(), loopItem.delegate()];
     }
 }
 
-class StationsViewDelegate extends BehaviorDelegate {
-    // see https://forums.garmin.com/developer/connect-iq/f/discussion/371941/switching-between-views
-    // some Delegate is needed in the getView() call above, otherwise an Array out of Bounds error is thrown
+class LoopItem {
+    private var _data as NetatmoStationData;
+    private var _view as StationView;
+    private var _delegate as StationViewDelegate;
 
-    private var _service;
-
-    public function initialize(service as NetatmoService) {
-        BehaviorDelegate.initialize();
-        self._service = service;
+    public function initialize(data as NetatmoStationData, service as NetatmoService) {
+        self._data = data;
+        self._view = new StationView(data, service);
+        self._delegate = new StationViewDelegate(service, self._view);
     }
 
-    public function onSelect() as Boolean {
-        var menu = new WatchUi.Menu2({:title => "Menu"});
-
-        menu.addItem(new WatchUi.MenuItem("Reload", "Reload stations data.", "reload", null));
-        menu.addItem(new WatchUi.MenuItem("Reauth", "Reauthenticate with Netatmo.", "reauth", null));
-        WatchUi.pushView(menu, new GenericMenuDelegate(method(:onMenuItemSelected)), WatchUi.SLIDE_UP);
-        return true;
-    }
-
-    public function onMenuItemSelected(item as MenuItem) as Void {
-        switch(item.getId()) {
-            case "reload":
-                // FIXME when we have a cache, then we would have to call "clear cache" on the service
-                break;
-            case "reauth":
-                self._service.dropAuthenticationData();
-                break;
-        }
-        WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
-        navigateToLoadingView(self._service);
-    }
+    public function data() as NetatmoStationData { return self._data; }
+    public function view() as StationView { return self._view; }
+    public function delegate() as StationViewDelegate { return self._delegate; }
 }
