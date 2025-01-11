@@ -1,6 +1,18 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 
+function getLoadingViewWithDelegate(service as NetatmoService) as [Views, InputDelegates] {
+    return [ new LoadingView(service), new LoadingViewDelegate(service) ];
+}
+
+function navigateToLoadingView(service as NetatmoService) as Void {
+    // FIXME if needed, we could accept some options here that influence how the data is loaded
+    // -> currently the view will always load data in the same way when switched to it
+    // is it wrong to load the data in onShow()? should we load the data in initialize?
+    var viewWithDelegate = getLoadingViewWithDelegate(service);
+    WatchUi.switchToView(viewWithDelegate[0], viewWithDelegate[1], WatchUi.SLIDE_RIGHT);
+}
+
 class LoadingView extends WatchUi.View {
 
     private var _notification as Notification?;
@@ -21,8 +33,7 @@ class LoadingView extends WatchUi.View {
     }
 
     public function onDataLoaded(data as NetatmoStationsData) as Void {
-        var loop = new ViewLoop(new NetatmoStationsViewFactory(data, self._service), null);
-        WatchUi.pushView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);        
+        navigateToStationsDataView(data, self._service);
     }
 
     public function onNotification(notification as Notification) as Void {

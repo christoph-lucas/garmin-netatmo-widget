@@ -22,12 +22,12 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
     public function onStop(state as Dictionary?) as Void { }
 
     public function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [ new LoadingView(self._service), new LoadingViewDelegate(self._service) ];
+        return getLoadingViewWithDelegate(self._service);
     }
 
     public function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {
         // https://developer.garmin.com/connect-iq/api-docs/Toybox/Application/AppBase.html#getGlanceView-instance_function
-        return [ new GlanceView(self._service) ];
+        return getNetatmoGlanceView(self._service);
     }
 
 }

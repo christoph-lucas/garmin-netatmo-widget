@@ -1,6 +1,11 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 
+function navigateToStationsDataView(data as NetatmoStationsData, service as NetatmoService) as Void {
+    var loop = new ViewLoop(new NetatmoStationsViewFactory(data, service), null);
+    WatchUi.switchToView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);
+}
+
 class NetatmoStationsViewFactory extends ViewLoopFactory {
 
     private var _allViews as Array<StationView>;
@@ -48,25 +53,15 @@ class StationsViewDelegate extends BehaviorDelegate {
     }
 
     public function onMenuItemSelected(item as MenuItem) as Void {
-        // TODO conceptually, here we want to trigger any action on the service and then show the result
-        // coincidentally the final action can always be to switch to the default view and reload the data
-        // yet that would not have to be this way necessarily -> how would one do that without duplicating the default view
-        // e.g. when the action should be to load data in a special way 
-        // -> the default view will always load data in the same way when switched to it
-        // is it wrong to load the data in onShow()? should we load the data in initialize?
-
         switch(item.getId()) {
             case "reload":
                 // FIXME when we have a cache, then we would have to call "clear cache" on the service
-                WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
-                WatchUi.popView(WatchUi.SLIDE_RIGHT); // pops LoopView
                 break;
             case "reauth":
                 self._service.dropAuthenticationData();
-                WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
-                WatchUi.popView(WatchUi.SLIDE_RIGHT); // pops LoopView
                 break;
         }
-
+        WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
+        navigateToLoadingView(self._service);
     }
 }
