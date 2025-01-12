@@ -1,5 +1,4 @@
 import Toybox.Lang;
-import Toybox.Time;
 
 class NetatmoStationData {
     private var _name as String;
