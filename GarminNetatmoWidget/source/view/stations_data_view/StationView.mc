@@ -19,7 +19,20 @@ class StationView extends WatchUi.View {
         View.onUpdate(dc);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
         dc.clear();
-        NetatmoStationDrawer.draw(dc, self._data);
+        self._drawStationData(dc);
+    }
+
+    private function _drawStationData(dc as Dc) as Void {
+        dc.drawText(dc.getWidth() / 2, 0.25 * dc.getHeight(), Graphics.FONT_SMALL, self._data.name(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        
+        var time = self._data.measurementTimestamp().toString();
+        dc.drawText(dc.getWidth() / 2, 0.4 * dc.getHeight(), Graphics.FONT_TINY, time, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        
+        var temp = self._data.temperature().toLongString();
+        dc.drawText(dc.getWidth() / 2, 0.5 * dc.getHeight(), Graphics.FONT_TINY, temp, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+        var co2 = self._data.co2().toLongString();
+        dc.drawText(dc.getWidth() / 2, 0.6 * dc.getHeight(), Graphics.FONT_TINY, co2, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
     function onLayout(dc as Dc) as Void { }
