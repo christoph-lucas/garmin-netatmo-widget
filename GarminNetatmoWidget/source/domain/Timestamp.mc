@@ -3,12 +3,34 @@ import Toybox.Time;
 
 class Timestamp {
 
+    public static function inSecondsFromNow(secondsFromNow as Number) as Timestamp {
+        var now = Time.now() as Time.Moment;
+        var durationFromSeconds = new Time.Duration(secondsFromNow);
+        var futureTimestamp = now.add(durationFromSeconds) as Time.Moment;
+        return new Timestamp(futureTimestamp.value());
+    }
+
     private var _value as Moment?;
     
     public function initialize(secondsInEpoch as Number?) {
         if (secondsInEpoch != null) {
             self._value = new Moment(secondsInEpoch);
         }
+    }
+
+    public function value() as Number {
+        if (self._value != null) {
+            return self._value.value();
+        }
+        return -1; // TODO what to do here?
+    }
+
+    public function inFuture() as Boolean {
+        if (self._value == null) { return false; }
+        if (Time.now().lessThan(self._value)) {
+            return true;
+        }
+        return false;
     }
 
     public function toString() as String {
@@ -27,4 +49,8 @@ class Timestamp {
             ]
         );
     }
+
+
+
+
 }

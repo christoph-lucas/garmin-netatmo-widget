@@ -67,7 +67,7 @@ class NetatmoAuthenticator {
     // STEP 2
     private function _ensureAccessTokenValidity() as Void {
         var accessTokenValidUntilRaw = Storage.getValue(ACCESS_TOKEN_VALID_UNTIL);
-        if (ExpirationTimestamp.from(accessTokenValidUntilRaw).isValid()) {
+        if (new Timestamp(accessTokenValidUntilRaw).inFuture()) {
                 var accessToken = Storage.getValue(ACCESS_TOKEN);
                 if (notEmpty(accessToken)) {
                     self._accessTokenConsumer.invoke(accessToken);
@@ -96,7 +96,7 @@ class NetatmoAuthenticator {
     private function _storeAccessToken(accessToken as String, expiresIn as Number) as Void {
         Storage.setValue(ACCESS_TOKEN, accessToken);
 
-        var validUntil = ExpirationTimestamp.expiresIn(expiresIn - 60);  // Remove 1 min to be on the safe side
+        var validUntil = Timestamp.inSecondsFromNow(expiresIn - 60);  // Remove 1 min to be on the safe side
         Storage.setValue(ACCESS_TOKEN_VALID_UNTIL, validUntil.value());
     }
 }
