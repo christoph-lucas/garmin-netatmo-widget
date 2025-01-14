@@ -6,7 +6,7 @@ function getLoadingViewWithDelegate(service as NetatmoService) as [Views, InputD
 }
 
 function navigateToLoadingView(service as NetatmoService) as Void {
-    // FIXME if needed, we could accept some options here that influence how the data is loaded
+    // NB if needed, we could accept some options here that influence how the data is loaded
     // -> currently the view will always load data in the same way when switched to it
     // is it wrong to load the data in onShow()? should we load the data in initialize?
     var viewWithDelegate = getLoadingViewWithDelegate(service);

@@ -114,7 +114,7 @@ class AuthenticationEndpoint {
     }
 
     public function callAndThen(authenticationCodeHandler as AuthenticationCodeHandler) {
-        if (self._handler != null) {return;} // FIXME throw exception
+        if (self._handler != null) {throw new OperationNotAllowedException("Handler already defined.");}
         self._handler = authenticationCodeHandler;
         self._requestAuthenticationCode();
     }
@@ -176,7 +176,7 @@ class TokensFromCodeEndpoint {
     }
 
     public function callAndThen(authenticationCode as String, tokensHandler as TokensHandler) {
-        if (self._handler != null) {return;} // FIXME throw exception
+        if (self._handler != null) {throw new OperationNotAllowedException("Handler already defined.");}
         self._handler = tokensHandler;
         self._getTokensFrom(authenticationCode);
     }
@@ -236,7 +236,7 @@ class RefreshAccessTokenEndpoint {
     }
 
     public function callAndThen(refreshToken as String, tokenHandler as TokensHandler) {
-        if (self._handler != null) {return;} // FIXME throw exception
+        if (self._handler != null) {throw new OperationNotAllowedException("Handler already defined.");}
         self._handler = tokenHandler;
         self._refreshAccessToken(refreshToken);
     }

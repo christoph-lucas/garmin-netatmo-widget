@@ -5,8 +5,6 @@ typedef StationsDataConsumer as Method(data as NetatmoStationsData) as Void;
 
 class NetatmoDataRetriever {
 
-    // FIXME cache retrieved data from netatmo for e.g. 5 minutes in persistent storage
-
     private var _dataConsumer as StationsDataConsumer;
     private var _notificationConsumer as NotificationConsumer;
 
@@ -34,7 +32,7 @@ class StationsDataEndpoint {
     }
 
     public function callAndThen(homesDataHandler as StationsDataConsumer) {
-        if (self._handler != null) {return;} // FIXME throw exception
+        if (self._handler != null) {throw new OperationNotAllowedException("Handler already defined.");}
         self._handler = homesDataHandler;
         self._requestHomesData();
     }
