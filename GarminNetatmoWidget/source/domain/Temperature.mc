@@ -17,4 +17,6 @@ class Temperature {
     public function toLongString() as String {
         return "Temp: " + self.toShortString();
     }
+
+    public function value() as Float? { return self._value; }
 }

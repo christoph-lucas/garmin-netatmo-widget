@@ -1,6 +1,18 @@
 import Toybox.Lang;
 
+typedef NetatmoStationDataDict as Dictionary<String, String or Number>;
+
 class NetatmoStationData {
+
+    public static function fromDict(dict as NetatmoStationDataDict) as NetatmoStationData {
+        return new NetatmoStationData(
+            dict["name"],
+            new Timestamp(dict["measurementTimestamp"]),
+            new Temperature(dict["temperature"]),
+            new CO2(dict["co2"])
+        );
+    }
+
     private var _name as String;
     private var _measurementTimestamp as Timestamp;
     private var _temperature as Temperature;
@@ -27,6 +39,15 @@ class NetatmoStationData {
 
     public function co2() as CO2 {
         return self._co2;
+    }
+
+    public function toDict() as NetatmoStationDataDict {
+        return {
+            "name" => self._name,
+            "measurementTimestamp" => self._measurementTimestamp.value(),
+            "temperature" => self._temperature.value(),
+            "co2" => self._co2.value()
+        };
     }
 
 }

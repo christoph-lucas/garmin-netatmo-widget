@@ -17,4 +17,6 @@ class CO2 {
     public function toLongString() as String {
         return "CO2: " + self.toShortString();
     }
+
+    public function value() as Number? { return self._value; }
 }

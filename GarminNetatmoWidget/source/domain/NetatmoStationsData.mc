@@ -1,7 +1,25 @@
 import Toybox.Lang;
 import Toybox.Time;
 
+typedef DeviceDict as Dictionary<String, NetatmoStationDataDict or Array<NetatmoStationDataDict>>;
+typedef NetatmoStationsDataDict as Dictionary<String, Array<DeviceDict>>;
+
 class NetatmoStationsData {
+
+    public static function fromDict(dict as NetatmoStationsDataDict) as NetatmoStationsData {
+        return new NetatmoStationsData(
+            NetatmoStationsData._devicesFromArray(dict["devices"])
+        );
+    }
+
+    private static function _devicesFromArray(dataArray as Array<DeviceDict>) as Array<Device> {
+        var result = new[dataArray.size()] as Array<Device>;
+        for (var i = 0; i < dataArray.size(); i++) {
+            result[i] = Device.fromDict(dataArray[i]);
+        }
+        return result;
+    }
+
     private var _devices as Array<Device>;
 
     public function initialize(devices as Array<Device>) {
@@ -25,9 +43,37 @@ class NetatmoStationsData {
         return allStations;
     }
 
+    public function toDict() as NetatmoStationsDataDict {
+        return {"devices" => self._devicesToDict()};
+    }
+
+    private function _devicesToDict() as Array<DeviceDict> {
+        var result = new[self._devices.size()] as Array<DeviceDict>;
+        for (var i = 0; i < self._devices.size(); i++) {
+            result[i] = self._devices[i].toDict();
+        }
+        return result;
+    }
 }
 
+
 class Device {
+
+    public static function fromDict(dict as DeviceDict) as Device {
+        return new Device(
+            NetatmoStationData.fromDict(dict["mainStation"]),
+            Device._modulesFromArray(dict["modules"])
+        );
+    }
+
+    private static function _modulesFromArray(dataArray as Array<NetatmoStationDataDict>) as Array<NetatmoStationData> {
+        var result = new[dataArray.size()] as Array<NetatmoStationData>;
+        for (var i = 0; i < dataArray.size(); i++) {
+            result[i] = NetatmoStationData.fromDict(dataArray[i]);
+        }
+        return result;
+    }
+
     private var _mainStation as NetatmoStationData;
     private var _modules as Array<NetatmoStationData>;
 
@@ -52,4 +98,18 @@ class Device {
         return self._modules; // TODO return copy
     }
 
+    public function toDict() as DeviceDict {
+        return {
+            "mainStation" => self._mainStation.toDict(),
+            "modules" => self._modulesToDict()
+        };
+    }
+
+    private function _modulesToDict() as Array<NetatmoStationDataDict> {
+        var result = new[self._modules.size()] as Array<NetatmoStationDataDict>;
+        for (var i = 0; i < self._modules.size(); i++) {
+            result[i] = self._modules[i].toDict();
+        }
+        return result;
+    }
 }
