@@ -17,7 +17,7 @@ class StationViewDelegate extends BehaviorDelegate {
     public function onSelect() as Boolean {
         var menu = new WatchUi.Menu2({:title => "Menu"});
 
-        menu.addItem(new WatchUi.MenuItem("Reload", "Reload stations data.", "reload", null));
+        menu.addItem(new WatchUi.MenuItem("Reload", "Clear cache and reload.", "reload", null));
         menu.addItem(new WatchUi.MenuItem("Reauth", "Reauthenticate with Netatmo.", "reauth", null));
         WatchUi.pushView(menu, new GenericMenuDelegate(method(:onMenuItemSelected)), WatchUi.SLIDE_UP);
         return true;
@@ -26,7 +26,7 @@ class StationViewDelegate extends BehaviorDelegate {
     public function onMenuItemSelected(item as MenuItem) as Void {
         switch(item.getId()) {
             case "reload":
-                // FIXME when we have a cache, then we would have to call "clear cache" on the service
+                self._service.clearCacheIfConnected();
                 WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
                 navigateToLoadingView(self._service);
                 break;

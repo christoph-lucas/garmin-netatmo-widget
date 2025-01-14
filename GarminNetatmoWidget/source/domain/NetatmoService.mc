@@ -1,10 +1,13 @@
 using Toybox.Application.Storage;
+import Toybox.System;
 
 class NetatmoService {
     private var _clientAuth as NetatmoClientAuth;
+    private var _cache as StationsDataCache;
 
     public function initialize(clientAuth as NetatmoClientAuth) {
         self._clientAuth = clientAuth;
+        self._cache = new StationsDataCache();
     }
 
     public function loadStationData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
@@ -15,5 +18,11 @@ class NetatmoService {
         Storage.deleteValue(REFRESH_TOKEN);
         Storage.deleteValue(ACCESS_TOKEN);
         Storage.deleteValue(ACCESS_TOKEN_VALID_UNTIL);
+    }
+
+    public function clearCacheIfConnected() as Void {
+        if (System.getDeviceSettings().connectionAvailable) {
+            self._cache.clear();
+        }
     }
 }
