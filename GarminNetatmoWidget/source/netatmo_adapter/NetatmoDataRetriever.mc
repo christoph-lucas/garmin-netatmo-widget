@@ -99,17 +99,17 @@ class StationsDataEndpoint {
         // the device and each module share the same structure in the response
         var dashboardData = dict["dashboard_data"] as Dictionary?;
 
+        var id = new StationId(dict["_id"] as String);
         var name = dict["module_name"] as String;
         if (dashboardData != null) {
             var measurementTimestamp = dashboardData["time_utc"] as Number;
             var temp = dashboardData["Temperature"] as Float;
             var co2 = dashboardData["CO2"] as Number;
-            return new NetatmoStationData(name, new Timestamp(measurementTimestamp), new Temperature(temp), new CO2(co2));
+            return new NetatmoStationData(id, name, new Timestamp(measurementTimestamp), new Temperature(temp), new CO2(co2));
         }
 
         // if station is not connected, there is no dashboard data
-        // FIXME handle more gracefully
-        return new NetatmoStationData(name, new Timestamp(null), new Temperature(null), new CO2(null));
+        return new NetatmoStationData(id, name, new Timestamp(null), new Temperature(null), new CO2(null));
     }
 
 }
