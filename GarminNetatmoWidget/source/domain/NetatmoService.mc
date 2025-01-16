@@ -30,4 +30,10 @@ class NetatmoService {
         Storage.setValue(DEFAULT_STATION_ID, data.id().value());
     }
 
+    public function getDefaultStationId() as StationId? {
+        var rawId = Storage.getValue(DEFAULT_STATION_ID);
+        if (notEmpty(rawId)) { return new StationId(rawId); }
+        return null;
+    }
+
 }

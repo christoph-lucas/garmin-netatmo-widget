@@ -22,7 +22,7 @@ class GlanceView extends Ui.GlanceView {
 
     public function onDataLoaded(data as NetatmoStationsData) as Void {
         if (data.numberOfDevices() > 0) {
-            self._data = data.device(0).mainStation();
+            self._data = self._getSelectedStationData(data);
         } else {
            self._notification = new NetatmoError("No data");
         }
@@ -47,6 +47,19 @@ class GlanceView extends Ui.GlanceView {
         } else {
             dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_SMALL, "Starting...", justification);
         }
+    }
+
+    private function _getSelectedStationData(data as NetatmoStationsData) as NetatmoStationData {
+        var selectedId = self._service.getDefaultStationId() as StationId?;
+        if (selectedId != null) {
+            var allStations = data.allStations();
+            for (var i = 0; i < allStations.size(); i++) {
+                if (selectedId.equals(allStations[i].id())) {
+                    return allStations[i];
+                }
+            }
+        }
+        return data.device(0).mainStation();
     }
 
 }
