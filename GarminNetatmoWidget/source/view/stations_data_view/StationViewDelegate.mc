@@ -17,9 +17,15 @@ class StationViewDelegate extends BehaviorDelegate {
     public function onSelect() as Boolean {
         var menu = new WatchUi.Menu2({:title => "Menu"});
 
-        menu.addItem(new WatchUi.MenuItem("Default", "Select as default.", "default", null));
+        var selectedId = self._service.getDefaultStationId() as StationId?;
+        if (selectedId != null && selectedId.equals(self._view.data().id())) {
+            menu.addItem(new WatchUi.MenuItem("Clear default.", "Clear default station selection.", "clearDefault", null));
+        } else {
+            menu.addItem(new WatchUi.MenuItem("Default", "Select as default.", "default", null));
+        }
         menu.addItem(new WatchUi.MenuItem("Reload", "Clear cache and reload.", "reload", null));
         menu.addItem(new WatchUi.MenuItem("Reauth", "Reauthenticate with Netatmo.", "reauth", null));
+
         WatchUi.pushView(menu, new GenericMenuDelegate(method(:onMenuItemSelected)), WatchUi.SLIDE_UP);
         return true;
     }
@@ -28,6 +34,10 @@ class StationViewDelegate extends BehaviorDelegate {
         switch(item.getId()) {
             case "default":
                 self._service.setDefaultStation(self._view.data());
+                WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
+                break;
+            case "clearDefault":
+                self._service.clearDefaultStationId();
                 WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
                 break;
             case "reload":

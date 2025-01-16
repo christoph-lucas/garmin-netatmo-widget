@@ -36,4 +36,8 @@ class NetatmoService {
         return null;
     }
 
+    public function clearDefaultStationId() as Void {
+        Storage.deleteValue(DEFAULT_STATION_ID);
+    }
+
 }
