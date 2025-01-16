@@ -47,4 +47,6 @@ class StationView extends WatchUi.View {
         self._reloadPending = true;
     }
 
+    public function data() as NetatmoStationData { return self._data; }
+
 }

@@ -25,4 +25,9 @@ class NetatmoService {
             self._cache.clear();
         }
     }
+
+    public function setDefaultStation(data as NetatmoStationData) as Void {
+        Storage.setValue(DEFAULT_STATION_ID, data.id().value());
+    }
+
 }
