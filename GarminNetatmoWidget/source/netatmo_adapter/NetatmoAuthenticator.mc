@@ -52,14 +52,14 @@ class NetatmoAuthenticator {
         if (notEmpty(refreshToken)) {
             self._ensureAccessTokenValidity();
         } else {
-            self._notificationConsumer.invoke(new Status("Authorizing, check phone."));
+            self._notificationConsumer.invoke(new Status("Authorizing,\n check phone."));
             new AuthenticationEndpoint(self._clientAuth, self._notificationConsumer).callAndThen(method(:_getTokensFrom));
         }
     }
 
     // STEP 1b
     public function _getTokensFrom(authenticationCode as String) as Void {
-        self._notificationConsumer.invoke(new Status("Auth code received, get tokens."));
+        self._notificationConsumer.invoke(new Status("Auth code received,\n get tokens."));
         new TokensFromCodeEndpoint(self._clientAuth, self._notificationConsumer)
             .callAndThen(authenticationCode, method(:_receiveTokens));
     }
@@ -75,7 +75,7 @@ class NetatmoAuthenticator {
                 }
         }
 
-        self._notificationConsumer.invoke(new Status("Refreshing access token."));
+        self._notificationConsumer.invoke(new Status("Refreshing\n access token."));
         var refreshToken = Storage.getValue(REFRESH_TOKEN);
         new RefreshAccessTokenEndpoint(self._clientAuth, self._notificationConsumer)
             .callAndThen(refreshToken, method(:_receiveTokens));
@@ -83,7 +83,7 @@ class NetatmoAuthenticator {
 
     // STEP 1c and 2b
     public function _receiveTokens(refresh_token as String, accessToken as String, expiresIn as Number) as Void {
-        self._notificationConsumer.invoke(new Status("Storing access token."));
+        self._notificationConsumer.invoke(new Status("Storing\n access token."));
         self._storeRefreshToken(refresh_token);
         self._storeAccessToken(accessToken, expiresIn);
         self._accessTokenConsumer.invoke(accessToken);

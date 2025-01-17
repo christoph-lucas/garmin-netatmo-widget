@@ -8,6 +8,6 @@ class Status extends Notification {
         self._status = status;
     }
 
-    public function short() as String {return self._status; }
+    public function short() as String {return self._status; } // TODO remove line breaks
     public function long() as String {return self._status; }
 }
