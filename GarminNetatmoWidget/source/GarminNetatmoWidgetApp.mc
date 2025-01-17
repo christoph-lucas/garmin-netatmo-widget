@@ -22,7 +22,7 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
     public function onStop(state as Dictionary?) as Void { }
 
     public function getInitialView() as [Views] or [Views, InputDelegates] {
-        return getLoadingViewWithDelegate(self._service);
+        return getLoadingView(self._service);
     }
 
     public function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {

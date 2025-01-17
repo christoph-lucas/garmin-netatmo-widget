@@ -1,9 +1,8 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 
-class LoadingViewDelegate extends BehaviorDelegate {
-    // see https://forums.garmin.com/developer/connect-iq/f/discussion/371941/switching-between-views
-    // some Delegate is needed in the getView() call above, otherwise an Array out of Bounds error is thrown
+
+class NotificationViewDelegate extends BehaviorDelegate {
 
     private var _service;
 
@@ -27,12 +26,12 @@ class LoadingViewDelegate extends BehaviorDelegate {
             case "reload":
                 self._service.clearCacheIfConnected();
                 WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
-                WatchUi.requestUpdate(); // we are already in the initial view, just update it
+                navigateToLoadingView(self._service);
                 break;
             case "reauth":
                 self._service.dropAuthenticationData();
                 WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
-                WatchUi.requestUpdate(); // we are already in the initial view, just update it
+                navigateToLoadingView(self._service);
                 break;
         }
 
