@@ -15,9 +15,12 @@ class NetatmoService {
     }
 
     public function dropAuthenticationData() as Void {
-        Storage.deleteValue(REFRESH_TOKEN);
-        Storage.deleteValue(ACCESS_TOKEN);
-        Storage.deleteValue(ACCESS_TOKEN_VALID_UNTIL);
+        if (System.getDeviceSettings().connectionAvailable) {
+            Storage.deleteValue(REFRESH_TOKEN);
+            Storage.deleteValue(ACCESS_TOKEN);
+            Storage.deleteValue(ACCESS_TOKEN_VALID_UNTIL);
+        }
+        self.clearCacheIfConnected();
     }
 
     public function clearCacheIfConnected() as Void {

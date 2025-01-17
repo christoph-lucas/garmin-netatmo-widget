@@ -35,22 +35,17 @@ class LoadingView extends WatchUi.View {
     }
 
     public function onDataLoaded(data as NetatmoStationsData) as Void {
-        self._popBusyIndicator();
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
         navigateToStationsDataView(data, self._service);
     }
 
     public function onNotification(notification as Notification) as Void {
         if (notification instanceof NetatmoError) {
-            self._popBusyIndicator();
+            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
             navigateToNotificationView(self._service, notification);
         } else {
             self._busyIndicator.setDisplayString(notification.long());
         }
-    }
-
-    private function _popBusyIndicator() as Void {
-        var curView = WatchUi.getCurrentView()[0];
-        if (curView == self._busyIndicator) { WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); }
     }
 
     function onUpdate(dc as Dc) as Void {
