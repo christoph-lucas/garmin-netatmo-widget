@@ -43,7 +43,7 @@ class GlanceView extends Ui.GlanceView {
             var co2 = self._data.co2().toShortString();
             dc.drawText(0, 0.75 * dc.getHeight(), Graphics.FONT_TINY, temp + " / " + co2, justification);
         } else if (self._notification != null) {
-            dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_SMALL, self._notification.short(), justification);
+            dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_TINY, self._notification.short(), justification);
         } else {
             dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_SMALL, "Starting...", justification);
         }
