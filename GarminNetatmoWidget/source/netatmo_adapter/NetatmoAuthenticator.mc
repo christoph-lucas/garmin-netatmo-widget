@@ -277,8 +277,7 @@ class RefreshAccessTokenEndpoint {
             self._handler.invoke(refresh_token, accessToken, expires_in);
         } else {
             var error = typedData["error"];
-            var desc = typedData["error_description"];
-            self._errorHandler.invoke(new WebRequestError("Tokens", responseCode, desc, error));
+            self._errorHandler.invoke(new WebRequestError("Tokens", responseCode, null, error));
         }
     }
 }
