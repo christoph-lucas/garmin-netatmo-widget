@@ -102,14 +102,18 @@ class StationsDataEndpoint {
         var id = new StationId(dict["_id"] as String);
         var name = dict["module_name"] as String;
         if (dashboardData != null) {
-            var measurementTimestamp = dashboardData["time_utc"] as Number;
-            var temp = dashboardData["Temperature"] as Float;
-            var co2 = dashboardData["CO2"] as Number;
-            return new NetatmoStationData(id, name, new Timestamp(measurementTimestamp), new Temperature(temp), new CO2(co2));
+            var measurementTimestamp = dashboardData["time_utc"] as Number?;
+            var temp = dashboardData["Temperature"] as Float?;
+            var co2 = dashboardData["CO2"] as Number?;
+            var humidity = dashboardData["Humidity"] as Number?;
+            var pressure = dashboardData["Pressure"] as Float?;
+            var noise = dashboardData["Noise"] as Number?;
+            return new NetatmoStationData(id, name, new Timestamp(measurementTimestamp), 
+                new Temperature(temp), new CO2(co2), new Humidity(humidity), new Pressure(pressure), new Noise(noise));
         }
 
         // if station is not connected, there is no dashboard data
-        return new NetatmoStationData(id, name, new Timestamp(null), new Temperature(null), new CO2(null));
+        return new NetatmoStationData(id, name, new Timestamp(null), new Temperature(null), new CO2(null), new Humidity(null), new Pressure(null), new Noise(null));
     }
 
 }

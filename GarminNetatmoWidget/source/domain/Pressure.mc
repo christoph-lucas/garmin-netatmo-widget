@@ -1,6 +1,6 @@
 import Toybox.Lang;
 
-class Temperature {
+class Pressure {
     private var _value as Float?;
 
     public function initialize(value as Float?) {
@@ -11,13 +11,13 @@ class Temperature {
 
     public function toShortString() as String {
         if (self._value != null) {
-            return self._value.format("%.1f") + "°C";
+            return self._value.format("%.1f") + "mbar";
         }
         return "n/a";
     }
 
     public function toLongString() as String {
-        return "Temp: " + self.toShortString();
+        return "Pressure: " + self.toShortString();
     }
 
     public function value() as Float? { return self._value; }

@@ -7,6 +7,8 @@ class CO2 {
         self._value = value;
     }
 
+    public function isPresent() as Boolean { return self._value != null; }
+
     public function toShortString() as String {
         if (self._value != null) {
             return self._value + "ppm";

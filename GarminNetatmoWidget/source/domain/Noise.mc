@@ -1,9 +1,9 @@
 import Toybox.Lang;
 
-class Temperature {
-    private var _value as Float?;
+class Noise {
+    private var _value as Number?;
 
-    public function initialize(value as Float?) {
+    public function initialize(value as Number?) {
         self._value = value;
     }
 
@@ -11,14 +11,14 @@ class Temperature {
 
     public function toShortString() as String {
         if (self._value != null) {
-            return self._value.format("%.1f") + "°C";
+            return self._value + "dB";
         }
         return "n/a";
     }
 
     public function toLongString() as String {
-        return "Temp: " + self.toShortString();
+        return "Noise: " + self.toShortString();
     }
 
-    public function value() as Float? { return self._value; }
+    public function value() as Number? { return self._value; }
 }
