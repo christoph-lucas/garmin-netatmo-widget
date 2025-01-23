@@ -13,8 +13,15 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
         AppBase.initialize();
         var netatmoClientAuthRaw = Application.loadResource(Rez.JsonData.netatmoClientAuth) as Dictionary<String, String>;
         var netatmoClientAuth = new NetatmoClientAuth(netatmoClientAuthRaw["id"], netatmoClientAuthRaw["secret"]);
+        var config = new Config(
+            Properties.getValue("showTemp"),
+            Properties.getValue("showCO2"),
+            Properties.getValue("showHumidity"),
+            Properties.getValue("showPressure"),
+            Properties.getValue("showNoise")
+        );
 
-        self._service = new NetatmoService(netatmoClientAuth);
+        self._service = new NetatmoService(netatmoClientAuth, config);
     }
 
     public function onStart(state as Dictionary?) as Void { }

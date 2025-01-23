@@ -3,12 +3,16 @@ import Toybox.System;
 
 class NetatmoService {
     private var _clientAuth as NetatmoClientAuth;
+    private var _config as Config;
     private var _cache as StationsDataCache;
 
-    public function initialize(clientAuth as NetatmoClientAuth) {
+    public function initialize(clientAuth as NetatmoClientAuth, config as Config) {
         self._clientAuth = clientAuth;
+        self._config = config;
         self._cache = new StationsDataCache();
     }
+
+    public function config() as Config { return self._config; }
 
     public function loadStationData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
         new NetatmoAdapter(self._clientAuth, dataConsumer, notificationConsumer).loadStationData();

@@ -7,12 +7,14 @@ class StationView extends WatchUi.View {
     private var _data as NetatmoStationData;
     private var _service as NetatmoService;
     private var _reloadPending as Boolean;
+    private var _config as Config;
 
     function initialize(data as NetatmoStationData, service as NetatmoService) {
         View.initialize();
         self._data = data;
         self._service = service;
         self._reloadPending = false;
+        self._config = service.config();
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -27,19 +29,19 @@ class StationView extends WatchUi.View {
 
         var displayString = self._data.measurementTimestamp().toString();
 
-        if (self._data.temperature().isPresent()) {
+        if (self._config.showTemp() and self._data.temperature().isPresent()) {
             displayString += "\n" + self._data.temperature().toLongString();
         }
-        if (self._data.co2().isPresent()) {
+        if (self._config.showCO2() and self._data.co2().isPresent()) {
             displayString += "\n" + self._data.co2().toLongString();
         }
-        if (self._data.humidity().isPresent()) {
+        if (self._config.showHumidity() and self._data.humidity().isPresent()) {
             displayString += "\n" + self._data.humidity().toLongString();
         }
-        if (self._data.pressure().isPresent()) {
+        if (self._config.showPressure() and self._data.pressure().isPresent()) {
             displayString += "\n" + self._data.pressure().toLongString();
         }
-        if (self._data.noise().isPresent()) {
+        if (self._config.showNoise() and self._data.noise().isPresent()) {
             displayString += "\n" + self._data.noise().toLongString();
         }
         

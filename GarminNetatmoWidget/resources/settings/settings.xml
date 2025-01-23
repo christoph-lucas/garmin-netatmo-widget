@@ -1,0 +1,24 @@
+<settings>
+
+	<setting propertyKey="@Properties.appVersion" title="App Version">
+        <settingConfig type="alphaNumeric" readonly="true" />
+    </setting>
+
+
+    <setting propertyKey="@Properties.showTemp" title="Show temperature">
+        <settingConfig type="boolean" />
+    </setting>
+    <setting propertyKey="@Properties.showCO2" title="Show CO2">
+        <settingConfig type="boolean" />
+    </setting>
+    <setting propertyKey="@Properties.showHumidity" title="Show humidity">
+        <settingConfig type="boolean" />
+    </setting>
+    <setting propertyKey="@Properties.showPressure" title="Show pressure">
+        <settingConfig type="boolean" />
+    </setting>
+    <setting propertyKey="@Properties.showNoise" title="Show noise">
+        <settingConfig type="boolean" />
+    </setting>
+
+</settings>
