@@ -1,5 +1,5 @@
 <properties>
-	<property id="appVersion" type="string">0.10.0</property>
+	<property id="appVersion" type="string">0.11.0</property>
 	<property id="showTemp" type="boolean">true</property>
 	<property id="showCO2" type="boolean">true</property>
 	<property id="showHumidity" type="boolean">true</property>
