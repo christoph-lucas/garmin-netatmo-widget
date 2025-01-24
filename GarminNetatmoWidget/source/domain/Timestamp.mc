@@ -18,6 +18,9 @@ class Timestamp {
     private var _value as Moment?;
     
     public function initialize(secondsInEpoch as Number?) {
+        if (secondsInEpoch != null and secondsInEpoch < 0) {
+            throw new ValueOutOfBoundsException("Value must be >= 0.");
+        }
         if (secondsInEpoch != null and secondsInEpoch >= 0) {
             self._value = new Moment(secondsInEpoch);
         }
@@ -68,7 +71,12 @@ class Timestamp {
         );
     }
 
-
-
+    public function equals(other as Object?) as Boolean {
+        if (other == null) { return false; }
+        if (other instanceof Timestamp) {
+            return self.value().equals(other.value());
+        }
+        return false;
+    }
 
 }

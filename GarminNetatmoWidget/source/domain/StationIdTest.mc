@@ -1,7 +1,6 @@
 import Toybox.Lang;
 import Toybox.Test;
 
-(:glance)
 class StationIdTest {
 
     (:test)
