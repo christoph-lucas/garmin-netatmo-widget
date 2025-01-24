@@ -1,5 +1,6 @@
 import Toybox.Lang;
 
+(:glance)
 class Temperature {
     private var _value as Float?;
 

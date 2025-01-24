@@ -19,6 +19,7 @@ typedef AccessTokenConsumer as Method(accessToken as String) as Void;
 typedef AuthenticationCodeHandler as Method(authenticationCode as String) as Void;
 typedef TokensHandler as Method(refresh_token as String, accessToken as String, expiresIn as Number) as Void;
 
+(:glance)
 class NetatmoAuthenticator {
 
     private var _clientAuth as NetatmoClientAuth;
@@ -101,7 +102,7 @@ class NetatmoAuthenticator {
     }
 }
 
-
+(:glance)
 class AuthenticationEndpoint {
 
     private var _clientAuth as NetatmoClientAuth;
@@ -165,6 +166,7 @@ class AuthenticationEndpoint {
 
 }
 
+(:glance)
 class TokensFromCodeEndpoint {
     private var _clientAuth as NetatmoClientAuth;
     private var _handler as TokensHandler?;
@@ -225,6 +227,7 @@ class TokensFromCodeEndpoint {
     }
 }
 
+(:glance)
 class RefreshAccessTokenEndpoint {
     private var _clientAuth as NetatmoClientAuth;
     private var _handler as TokensHandler?;

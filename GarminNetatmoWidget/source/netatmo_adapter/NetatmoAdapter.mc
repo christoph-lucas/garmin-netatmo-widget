@@ -4,6 +4,7 @@ import Toybox.System;
 typedef DataConsumer as Method(data as NetatmoStationsData) as Void;
 typedef NotificationConsumer as Method(notification as Notification) as Void;
 
+(:glance)
 class NetatmoAdapter {
 
     private var _authenticator as NetatmoAuthenticator;

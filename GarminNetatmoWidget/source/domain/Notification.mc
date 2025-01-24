@@ -1,6 +1,7 @@
 import Toybox.Lang;
 
 // FIXME Is there a better way to have an Interface?
+(:glance)
 class Notification {
 
     public function initialize() { }

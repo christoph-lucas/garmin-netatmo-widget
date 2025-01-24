@@ -1,5 +1,6 @@
 import Toybox.Lang;
 
+(:glance)
 class Humidity {
     private var _value as Number?;
 

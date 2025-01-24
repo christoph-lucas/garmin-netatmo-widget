@@ -1,5 +1,6 @@
 import Toybox.Lang;
 
+(:glance)
 class NetatmoError extends Notification {
     private var _message as String;
 

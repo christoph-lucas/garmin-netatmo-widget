@@ -1,10 +1,12 @@
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 
+(:glance)
 function getNetatmoGlanceView(service as NetatmoService) as [GlanceView] {
         return [ new GlanceView(service) ];
 }
 
+(:glance)
 class GlanceView extends Ui.GlanceView {
     
     private var _data as NetatmoStationData?;

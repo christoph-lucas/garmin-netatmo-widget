@@ -3,6 +3,7 @@ import Toybox.Time;
 
 typedef StationsDataConsumer as Method(data as NetatmoStationsData) as Void;
 
+(:glance)
 class NetatmoDataRetriever {
 
     private var _dataConsumer as StationsDataConsumer;
@@ -21,6 +22,7 @@ class NetatmoDataRetriever {
 }
 
 //! see https://dev.netatmo.com/apidocumentation/weather#getstationsdata
+(:glance)
 class StationsDataEndpoint {
     private var _accessToken as String;
     private var _handler as StationsDataConsumer?;

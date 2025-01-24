@@ -3,6 +3,7 @@ using Toybox.Application.Storage;
 
 const NETATMO_DEFAULT_UPDATE_INTERVAL_IN_SECONDS as Number = 10*60; // 10 minutes
 
+(:glance)
 public class StationsDataCache {
 
     public function initialize() { }
@@ -45,6 +46,7 @@ public class StationsDataCache {
     }
 }
 
+(:glance)
 public class NetatmoStationsDataWithValidity {
     private var _data as NetatmoStationsData;
     private var _validUntil as Timestamp;

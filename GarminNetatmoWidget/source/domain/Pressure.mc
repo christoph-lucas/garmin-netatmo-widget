@@ -1,5 +1,6 @@
 import Toybox.Lang;
 
+(:glance)
 class Pressure {
     private var _value as Float?;
 

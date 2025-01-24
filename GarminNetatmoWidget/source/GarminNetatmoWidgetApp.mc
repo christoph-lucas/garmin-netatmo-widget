@@ -5,6 +5,7 @@ import Toybox.System;
 
 typedef DataLoader as Method(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void;
 
+(:glance)
 class GarminNetatmoWidgetApp extends Application.AppBase {
 
     private var _service as NetatmoService;

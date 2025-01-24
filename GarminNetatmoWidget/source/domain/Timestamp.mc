@@ -1,6 +1,7 @@
 import Toybox.Lang;
 import Toybox.Time;
 
+(:glance)
 class Timestamp {
 
     public static function now() as Timestamp {

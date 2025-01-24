@@ -1,5 +1,6 @@
 import Toybox.Lang;
 
+(:glance)
 class Noise {
     private var _value as Number?;
 

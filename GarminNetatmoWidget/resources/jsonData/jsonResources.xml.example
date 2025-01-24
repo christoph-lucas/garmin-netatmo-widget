@@ -1,5 +1,5 @@
 <jsonDataResources>
-    <jsonData id="netatmoClientAuth">
+    <jsonData id="netatmoClientAuth" scope="glance">
         <!-- Take values from https://dev.netatmo.com/apps/ -> corresponding app -->
         <!-- If you get "invalid access token" when reading data, recreate the app (see https://helpcenter.netatmo.com/hc/en-us/community/posts/21120122608018-invalid-access-token)-->
         {

@@ -1,6 +1,7 @@
 using Toybox.Application.Storage;
 import Toybox.System;
 
+(:glance)
 class NetatmoService {
     private var _clientAuth as NetatmoClientAuth;
     private var _config as Config;
