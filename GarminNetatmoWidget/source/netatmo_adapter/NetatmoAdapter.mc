@@ -5,6 +5,22 @@ typedef DataConsumer as Method(data as NetatmoStationsData) as Void;
 typedef NotificationConsumer as Method(notification as Notification) as Void;
 
 (:glance)
+class NetatmoAdapterFactory {
+
+    private var _clientAuth as NetatmoClientAuth;
+    private var _cache as StationsDataCache;
+
+    public function initialize(clientAuth as NetatmoClientAuth, cache as StationsDataCache) {
+        self._clientAuth = clientAuth;
+        self._cache = cache;
+    }
+
+    public function get(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as NetatmoAdapter {
+        return new NetatmoAdapter(self._clientAuth, self._cache, dataConsumer, notificationConsumer);
+    }
+}
+
+(:glance)
 class NetatmoAdapter {
 
     private var _authenticator as NetatmoAuthenticator;
@@ -13,12 +29,12 @@ class NetatmoAdapter {
     private var _dataConsumer as DataConsumer;
     private var _cache as StationsDataCache;
 
-    public function initialize(clientAuth as NetatmoClientAuth, dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) {
+    public function initialize(clientAuth as NetatmoClientAuth, cache as StationsDataCache, dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) {
         self._notificationConsumer = notificationConsumer;
         self._dataConsumer = dataConsumer;
         self._authenticator = new NetatmoAuthenticator(clientAuth, method(:loadDataGivenToken), notificationConsumer);
         self._retriever = new NetatmoDataRetriever(method(:cachingDataConsumer), notificationConsumer);
-        self._cache = new StationsDataCache();
+        self._cache = cache;
     }
 
     public function loadStationData() as Void {

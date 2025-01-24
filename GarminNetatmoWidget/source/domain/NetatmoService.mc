@@ -3,24 +3,25 @@ import Toybox.System;
 
 (:glance)
 class NetatmoService {
-    private var _clientAuth as NetatmoClientAuth;
     private var _config as Config;
     private var _cache as StationsDataCache;
+    private var _adapterFactory as NetatmoAdapterFactory;
 
-    public function initialize(clientAuth as NetatmoClientAuth, config as Config) {
-        self._clientAuth = clientAuth;
+    public function initialize(config as Config, cache as StationsDataCache, adapterFactory as NetatmoAdapterFactory) {
         self._config = config;
-        self._cache = new StationsDataCache();
+        self._cache = cache;
+        self._adapterFactory = adapterFactory;
     }
 
     public function config() as Config { return self._config; }
 
     public function loadStationData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
-        new NetatmoAdapter(self._clientAuth, dataConsumer, notificationConsumer).loadStationData();
+        self._adapterFactory.get(dataConsumer, notificationConsumer).loadStationData();
     }
 
     public function dropAuthenticationData() as Void {
         if (System.getDeviceSettings().connectionAvailable) {
+            // FIXME introduce NetatmoAuthenticationStorage -> used here and by the Authenticator
             Storage.deleteValue(REFRESH_TOKEN);
             Storage.deleteValue(ACCESS_TOKEN);
             Storage.deleteValue(ACCESS_TOKEN_VALID_UNTIL);

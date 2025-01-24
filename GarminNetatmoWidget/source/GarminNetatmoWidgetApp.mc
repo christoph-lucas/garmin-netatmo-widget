@@ -22,7 +22,10 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
             Properties.getValue("showNoise")
         );
 
-        self._service = new NetatmoService(netatmoClientAuth, config);
+        // Dependency Injection
+        var cache = new StationsDataCache();
+        var adapterFactory = new NetatmoAdapterFactory(netatmoClientAuth, cache);
+        self._service = new NetatmoService(config, cache, adapterFactory);
     }
 
     public function onStart(state as Dictionary?) as Void { }
