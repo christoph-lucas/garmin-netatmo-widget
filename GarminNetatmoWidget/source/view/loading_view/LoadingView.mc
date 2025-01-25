@@ -30,7 +30,7 @@ class LoadingView extends WatchUi.View {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
-        WatchUi.pushView(self._busyIndicator, null, WatchUi.SLIDE_DOWN);
+        WatchUi.pushView(self._busyIndicator, new BusyIndicatorDelegate(), WatchUi.SLIDE_DOWN);
         self._service.loadStationData(method(:onDataLoaded), method(:onNotification));
     }
 
@@ -64,4 +64,16 @@ class LoadingView extends WatchUi.View {
         dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_MEDIUM, "Starting...", Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
+}
+
+public class BusyIndicatorDelegate extends BehaviorDelegate {
+    function initialize() {
+        BehaviorDelegate.initialize();
+    }
+
+    function onBack() {
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // pop progress bar
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // pop loading view itself -> exit app
+        return true;
+    }
 }
