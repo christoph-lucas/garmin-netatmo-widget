@@ -5,7 +5,7 @@ typedef DataConsumer as Method(data as NetatmoStationsData) as Void;
 typedef NotificationConsumer as Method(notification as Notification) as Void;
 
 (:glance)
-class NetatmoAdapterFactory {
+class NetatmoConnectionsOrchastratorFactory {
 
     private var _clientAuth as NetatmoClientAuth;
     private var _cache as StationsDataCache;
@@ -15,13 +15,13 @@ class NetatmoAdapterFactory {
         self._cache = cache;
     }
 
-    public function get(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as NetatmoAdapter {
-        return new NetatmoAdapter(self._clientAuth, self._cache, dataConsumer, notificationConsumer);
+    public function get(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as NetatmoConnectionsOrchastrator {
+        return new NetatmoConnectionsOrchastrator(self._clientAuth, self._cache, dataConsumer, notificationConsumer);
     }
 }
 
 (:glance)
-class NetatmoAdapter {
+class NetatmoConnectionsOrchastrator {
 
     private var _authenticator as NetatmoAuthenticator;
     private var _retriever as NetatmoDataRetriever;

@@ -5,18 +5,18 @@ import Toybox.System;
 class NetatmoService {
     private var _config as Config;
     private var _cache as StationsDataCache;
-    private var _adapterFactory as NetatmoAdapterFactory;
+    private var _connectionsFactory as NetatmoConnectionsOrchastratorFactory;
 
-    public function initialize(config as Config, cache as StationsDataCache, adapterFactory as NetatmoAdapterFactory) {
+    public function initialize(config as Config, cache as StationsDataCache, connectionsFactory as NetatmoConnectionsOrchastratorFactory) {
         self._config = config;
         self._cache = cache;
-        self._adapterFactory = adapterFactory;
+        self._connectionsFactory = connectionsFactory;
     }
 
     public function config() as Config { return self._config; }
 
     public function loadStationData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
-        self._adapterFactory.get(dataConsumer, notificationConsumer).loadStationData();
+        self._connectionsFactory.get(dataConsumer, notificationConsumer).loadStationData();
     }
 
     public function dropAuthenticationData() as Void {
