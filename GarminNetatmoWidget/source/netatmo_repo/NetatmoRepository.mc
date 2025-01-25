@@ -17,7 +17,6 @@ public class NetatmoRepository {
     }
 
     public function dropAuthenticationData() as Void {
-        // FIXME introduce NetatmoAuthenticationStorage -> used here and by the Authenticator
         Storage.deleteValue(REFRESH_TOKEN);
         Storage.deleteValue(ACCESS_TOKEN);
         Storage.deleteValue(ACCESS_TOKEN_VALID_UNTIL);
