@@ -58,7 +58,7 @@ class StationViewDelegate extends BehaviorDelegate {
 
     public function onReauthResponse(value as Confirm) as Boolean {
         if (value == WatchUi.CONFIRM_YES) {
-            self._service.dropAuthenticationData();
+            self._service.dropAuthenticationDataIfConnected();
             WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
             // NB: the following line should switch stations data for loading view, but does not
             // probably some race condition when which view command is executed -> using a work around

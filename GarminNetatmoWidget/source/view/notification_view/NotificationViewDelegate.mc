@@ -29,7 +29,7 @@ class NotificationViewDelegate extends BehaviorDelegate {
                 navigateToLoadingView(self._service);
                 break;
             case "reauth":
-                self._service.dropAuthenticationData();
+                self._service.dropAuthenticationDataIfConnected();
                 WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView
                 navigateToLoadingView(self._service);
                 break;
