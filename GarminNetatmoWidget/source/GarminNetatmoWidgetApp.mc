@@ -25,7 +25,8 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
         // Dependency Injection
         var cache = new StationsDataCache();
         var connectionsFactory = new NetatmoConnectionsOrchastratorFactory(netatmoClientAuth, cache);
-        self._service = new NetatmoService(config, cache, connectionsFactory);
+        var repo = new NetatmoRepository(cache, connectionsFactory);
+        self._service = new NetatmoService(config, repo);
     }
 
     public function onStart(state as Dictionary?) as Void { }
