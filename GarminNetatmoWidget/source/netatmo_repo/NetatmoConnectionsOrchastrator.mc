@@ -4,7 +4,7 @@ import Toybox.System;
 typedef DataConsumer as Method(data as NetatmoStationsData) as Void;
 typedef NotificationConsumer as Method(notification as Notification) as Void;
 
-(:glance)
+(:glance, :background)
 class NetatmoConnectionsOrchastratorFactory {
 
     private var _clientAuth as NetatmoClientAuth;
@@ -20,7 +20,7 @@ class NetatmoConnectionsOrchastratorFactory {
     }
 }
 
-(:glance)
+(:glance, :background)
 class NetatmoConnectionsOrchastrator {
 
     private var _authenticator as NetatmoAuthenticator;
@@ -54,6 +54,22 @@ class NetatmoConnectionsOrchastrator {
 
         self._notificationConsumer.invoke(new Status("Authenticating..."));
         self._authenticator.requestAccessToken();
+    }
+
+    public function loadStationDataInBackground() as Void {
+        var cachedData = self._cache.get() as NetatmoStationsDataWithValidity?;
+        if (cachedData != null && cachedData.isValid()) {
+            self._dataConsumer.invoke(cachedData.data());
+            return;
+        }
+
+        if (!System.getDeviceSettings().connectionAvailable) {
+            self._notificationConsumer.invoke(new NetatmoError("No connection"));
+            return;
+        }
+
+        self._notificationConsumer.invoke(new Status("Authenticating..."));
+        self._authenticator.requestAccessTokenIfAuthenticated();
     }
 
     public function loadDataGivenToken(accessToken as String) as Void {

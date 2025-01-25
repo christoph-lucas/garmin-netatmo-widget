@@ -4,7 +4,7 @@ import Toybox.Time;
 typedef DeviceDict as Dictionary<String, NetatmoStationDataDict or Array<NetatmoStationDataDict>>;
 typedef NetatmoStationsDataDict as Dictionary<String, Array<DeviceDict>>;
 
-(:glance)
+(:glance, :background)
 class NetatmoStationsData {
 
     public static function fromDict(dict as NetatmoStationsDataDict) as NetatmoStationsData {
@@ -58,7 +58,7 @@ class NetatmoStationsData {
 }
 
 
-(:glance)
+(:glance, :background)
 class Device {
 
     public static function fromDict(dict as DeviceDict) as Device {

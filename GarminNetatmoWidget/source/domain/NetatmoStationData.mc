@@ -2,7 +2,7 @@ import Toybox.Lang;
 
 typedef NetatmoStationDataDict as Dictionary<String, String or Number>;
 
-(:glance)
+(:glance, :background)
 class NetatmoStationData {
 
     public static function fromDict(dict as NetatmoStationDataDict) as NetatmoStationData {

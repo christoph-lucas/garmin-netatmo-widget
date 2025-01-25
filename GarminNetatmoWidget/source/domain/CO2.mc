@@ -1,6 +1,6 @@
 import Toybox.Lang;
 
-(:glance)
+(:glance, :background)
 class CO2 {
     private var _value as Number?;
 

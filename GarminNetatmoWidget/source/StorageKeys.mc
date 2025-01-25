@@ -1,4 +1,4 @@
-(:glance)
+(:glance, :background)
 public enum StorageKeys {
     REFRESH_TOKEN,
     ACCESS_TOKEN,

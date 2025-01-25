@@ -19,7 +19,7 @@ typedef AccessTokenConsumer as Method(accessToken as String) as Void;
 typedef AuthenticationCodeHandler as Method(authenticationCode as String) as Void;
 typedef TokensHandler as Method(refresh_token as String, accessToken as String, expiresIn as Number) as Void;
 
-(:glance)
+(:glance, :background)
 class NetatmoAuthenticator {
 
     private var _clientAuth as NetatmoClientAuth;
@@ -46,6 +46,14 @@ class NetatmoAuthenticator {
         self._ensureAuthentication(); // starts the chain
     }
 
+    public function requestAccessTokenIfAuthenticated() as Void {
+        var refreshToken = Storage.getValue(REFRESH_TOKEN);
+        if (notEmpty(refreshToken)) {
+            self._ensureAccessTokenValidity();
+        } else {
+            self._notificationConsumer.invoke(new NetatmoError("Not authorized, illegal state."));
+        }
+    }
 
     // STEP 1
     private function _ensureAuthentication() as Void {
@@ -227,7 +235,7 @@ class TokensFromCodeEndpoint {
     }
 }
 
-(:glance)
+(:glance, :background)
 class RefreshAccessTokenEndpoint {
     private var _clientAuth as NetatmoClientAuth;
     private var _handler as TokensHandler?;

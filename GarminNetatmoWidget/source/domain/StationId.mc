@@ -1,6 +1,6 @@
 import Toybox.Lang;
 
-(:glance)
+(:glance, :background)
 class StationId {
     private var _value as String;
 

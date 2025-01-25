@@ -1,7 +1,7 @@
 using Toybox.Application.Storage;
 import Toybox.System;
 
-(:glance)
+(:glance, :background)
 class NetatmoService {
     private var _config as Config;
     private var _repo as NetatmoRepository;
@@ -15,6 +15,10 @@ class NetatmoService {
 
     public function loadStationData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
         self._repo.loadStationData(dataConsumer, notificationConsumer);
+    }
+
+    public function loadStationDataInBackground(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
+        self._repo.loadStationDataInBackground(dataConsumer, notificationConsumer);
     }
 
     public function dropAuthenticationDataIfConnected() as Void {

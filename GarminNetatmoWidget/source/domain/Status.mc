@@ -1,6 +1,6 @@
 import Toybox.Lang;
 
-(:glance)
+(:glance, :background)
 class Status extends Notification {
     private var _status as String;
 

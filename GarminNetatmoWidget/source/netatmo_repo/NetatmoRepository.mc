@@ -1,7 +1,7 @@
 using Toybox.Application.Storage;
 import Toybox.System;
 
-(:glance)
+(:glance, :background)
 public class NetatmoRepository {
 
     private var _cache as StationsDataCache;
@@ -14,6 +14,10 @@ public class NetatmoRepository {
 
     public function loadStationData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
         self._connectionsFactory.get(dataConsumer, notificationConsumer).loadStationData();
+    }
+
+    public function loadStationDataInBackground(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
+        self._connectionsFactory.get(dataConsumer, notificationConsumer).loadStationDataInBackground();
     }
 
     public function dropAuthenticationData() as Void {

@@ -1,6 +1,6 @@
 import Toybox.Lang;
 
-(:glance)
+(:glance, :background)
 class Config {
     private var _showTemp as Boolean;
     private var _showCO2 as Boolean;

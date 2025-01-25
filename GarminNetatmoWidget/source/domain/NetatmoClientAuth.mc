@@ -1,6 +1,6 @@
 import Toybox.Lang;
 
-(:glance)
+(:glance, :background)
 class NetatmoClientAuth {
     private var _id as String;
     private var _secret as String;
