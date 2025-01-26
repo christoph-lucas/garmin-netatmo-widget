@@ -57,14 +57,14 @@ class NetatmoConnectionsOrchastrator {
     }
 
     public function loadStationDataInBackground() as Void {
-        var cachedData = self._cache.get() as NetatmoStationsDataWithValidity?;
-        if (cachedData != null && cachedData.isValid()) {
-            self._dataConsumer.invoke(cachedData.data());
+        if (!System.getDeviceSettings().connectionAvailable) {
+            self._notificationConsumer.invoke(new NetatmoError("No connection"));
             return;
         }
 
-        if (!System.getDeviceSettings().connectionAvailable) {
-            self._notificationConsumer.invoke(new NetatmoError("No connection"));
+        var cachedData = self._cache.get() as NetatmoStationsDataWithValidity?;
+        if (cachedData != null && cachedData.isValid()) {
+            self._dataConsumer.invoke(cachedData.data());
             return;
         }
 
