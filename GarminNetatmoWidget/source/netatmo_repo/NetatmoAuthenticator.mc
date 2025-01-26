@@ -13,7 +13,7 @@ using Toybox.Time;
 const OAUTH_CODE = "netatmoOAuthCode";
 const OAUTH_ERROR = "netatmoOAuthError";
 const OAUTH_ERROR_DESC = "netatmoOAuthErrorDesc";
-const OAUTH_STATE = "netatmoOAuthState"; // FIXME implement for additional security against CSRF
+const OAUTH_STATE = "netatmoOAuthState";
 
 typedef AccessTokenConsumer as Method(accessToken as String) as Void;
 typedef AuthenticationCodeHandler as Method(authenticationCode as String) as Void;
@@ -116,10 +116,12 @@ class AuthenticationEndpoint {
     private var _clientAuth as NetatmoClientAuth;
     private var _handler as AuthenticationCodeHandler?;
     private var _errorHandler as NotificationConsumer;
+    private var _state as String;
 
     public function initialize(clientAuth as NetatmoClientAuth, errorHandler as NotificationConsumer) {
         self._clientAuth = clientAuth;
         self._errorHandler = errorHandler;
+        self._state = randomString(32);
     }
 
     public function callAndThen(authenticationCodeHandler as AuthenticationCodeHandler) {
@@ -136,7 +138,8 @@ class AuthenticationEndpoint {
         var params = {
             "redirect_uri" => "connectiq://oauth",
             "client_id" => self._clientAuth.id(),
-            "scope" => "read_station"
+            "scope" => "read_station",
+            "state" => self._state
         };
 
         // makeOAuthRequest triggers login prompt on mobile device.
@@ -165,6 +168,13 @@ class AuthenticationEndpoint {
                 self._errorHandler.invoke(new WebRequestError("Authorize", 0, error_desc, error));
                 return;
             }
+            var state = data[$.OAUTH_STATE];
+            if (!(self._state.equals(state))) {
+                var msg = "The returned state does not match the expected one.";
+                self._errorHandler.invoke(new WebRequestError("Authorize", 0, msg, null));
+                return;
+            }
+
             var code = data[$.OAUTH_CODE];
             self._handler.invoke(code);
         } else {
