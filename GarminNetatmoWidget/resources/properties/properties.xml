@@ -1,8 +1,10 @@
 <properties>
-	<property id="appVersion" type="string">0.12.0</property>
+	<property id="appVersion" type="string">0.12.1</property>
 	<property id="showTemp" type="boolean">true</property>
 	<property id="showCO2" type="boolean">true</property>
 	<property id="showHumidity" type="boolean">true</property>
 	<property id="showPressure" type="boolean">true</property>
 	<property id="showNoise" type="boolean">true</property>
+	<property id="activateBackgroundLoading" type="boolean">true</property>
+	<property id="backgroundRefreshInterval" type="number">5</property>
 </properties>

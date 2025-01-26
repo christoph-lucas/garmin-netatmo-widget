@@ -21,4 +21,11 @@
         <settingConfig type="boolean" />
     </setting>
 
+    <setting propertyKey="@Properties.activateBackgroundLoading" title="Activate refresh in background">
+        <settingConfig type="boolean" />
+    </setting>
+ 	<setting propertyKey="@Properties.backgroundRefreshInterval" title="Background refresh interval in minutes." prompt="5">
+ 		<settingConfig type="numeric" required="true" min="5" max="60" errorMessage="Value must be between 5 and 60 minutes."/>
+	</setting>
+
 </settings>

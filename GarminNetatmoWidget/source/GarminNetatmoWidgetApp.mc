@@ -21,7 +21,9 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
             Properties.getValue("showCO2"),
             Properties.getValue("showHumidity"),
             Properties.getValue("showPressure"),
-            Properties.getValue("showNoise")
+            Properties.getValue("showNoise"),
+            Properties.getValue("activateBackgroundLoading"),
+            Properties.getValue("backgroundRefreshInterval")
         );
 
         // Dependency Injection
@@ -31,9 +33,11 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
         self._service = new NetatmoService(config, repo);
 
         // Backgrounding: https://developer.garmin.com/connect-iq/core-topics/backgrounding/
-        // TODO: make configurable via properties: activate background at all -> use Background.deleteTemporalEvent() otherwise
-        // TODO: make configurable via properties: refresh period
-        Background.registerForTemporalEvent(new Time.Duration(10 * 60));
+        if (config.activateBackgroundLoading()) {
+            Background.registerForTemporalEvent(new Time.Duration(config.backgroundRefreshInterval() * 60));
+        } else {
+            Background.deleteTemporalEvent();
+        }
     }
 
     public function onStart(state as Dictionary?) as Void { }
@@ -70,7 +74,9 @@ class BackgroundDelegate extends System.ServiceDelegate {
 
     // DataConsumer
     public function onDataReceived(data as NetatmoStationsData) as Void {
-        // TODO trigger display update in Glance View and StationsDataView
+        // FIXME trigger display update in Glance View and StationsDataView
+        // -> not so easy since it does not exist in the app, would require a publisher observer, probably in the Service (the views register themselves as observer, services publishes "new data" events)
+        // -> not sure if it is worth it, since most people will not keep the app open
         Background.exit(true);
     }
 
