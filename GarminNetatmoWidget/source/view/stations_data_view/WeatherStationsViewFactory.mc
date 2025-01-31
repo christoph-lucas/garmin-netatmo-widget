@@ -2,11 +2,11 @@ import Toybox.WatchUi;
 import Toybox.Lang;
 
 function navigateToStationsDataView(data as WeatherStationsData, service as WeatherStationService) as Void {
-    var loop = new ViewLoop(new NetatmoStationsViewFactory(data, service), null);
+    var loop = new ViewLoop(new WeatherStationsViewFactory(data, service), null);
     WatchUi.switchToView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);
 }
 
-class NetatmoStationsViewFactory extends ViewLoopFactory {
+class WeatherStationsViewFactory extends ViewLoopFactory {
 
     private var _allLoopItems as Array<LoopItem>;
 
