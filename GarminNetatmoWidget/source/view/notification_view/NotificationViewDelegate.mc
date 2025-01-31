@@ -4,7 +4,7 @@ import Toybox.Lang;
 
 class NotificationViewDelegate extends BehaviorDelegate {
 
-    private var _service;
+    private var _service as NetatmoService;
 
     public function initialize(service as NetatmoService) {
         BehaviorDelegate.initialize();
@@ -22,7 +22,7 @@ class NotificationViewDelegate extends BehaviorDelegate {
     }
 
     public function onMenuItemSelected(item as MenuItem) as Void {
-        switch(item.getId()) {
+        switch(item.getId() as String) {
             case "reload":
                 self._service.clearCacheIfConnected();
                 WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView

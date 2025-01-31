@@ -1,6 +1,8 @@
 import Toybox.Lang;
+import Toybox.Application;
 using Toybox.Application.Storage;
 
+(:glance, :background)
 const NETATMO_DEFAULT_UPDATE_INTERVAL_IN_SECONDS as Number = 10*60; // 10 minutes
 
 (:glance, :background)
@@ -10,7 +12,7 @@ public class StationsDataCache {
 
     public function store(data as NetatmoStationsData) as Void {
         var mappedValue = data.toDict() as NetatmoStationsDataDict;
-        Storage.setValue(STATIONS_DATA_CACHE, mappedValue);
+        Storage.setValue(STATIONS_DATA_CACHE, mappedValue as Dictionary<PropertyKeyType, PropertyValueType>);
 
         var validUntil = self._computeValidUntil(data) as Timestamp;
         Storage.setValue(STATIONS_DATA_CACHE_VALID_UNTIL, validUntil.value());
@@ -22,7 +24,7 @@ public class StationsDataCache {
             var validUntil = Storage.getValue(STATIONS_DATA_CACHE_VALID_UNTIL) as Number?;
             if (validUntil != null) {
                 return new NetatmoStationsDataWithValidity(
-                    NetatmoStationsData.fromDict(mappedValue),
+                    NetatmoStationsData.fromDict(mappedValue as NetatmoStationsDataDict),
                     new Timestamp(validUntil)
                 );
             }

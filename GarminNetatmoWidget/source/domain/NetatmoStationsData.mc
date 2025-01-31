@@ -9,7 +9,7 @@ class NetatmoStationsData {
 
     public static function fromDict(dict as NetatmoStationsDataDict) as NetatmoStationsData {
         return new NetatmoStationsData(
-            NetatmoStationsData._devicesFromArray(dict["devices"])
+            NetatmoStationsData._devicesFromArray(dict["devices"] as Array<DeviceDict>)
         );
     }
 
@@ -63,8 +63,8 @@ class Device {
 
     public static function fromDict(dict as DeviceDict) as Device {
         return new Device(
-            NetatmoStationData.fromDict(dict["mainStation"]),
-            Device._modulesFromArray(dict["modules"])
+            NetatmoStationData.fromDict(dict["mainStation"] as NetatmoStationDataDict),
+            Device._modulesFromArray(dict["modules"] as Array<NetatmoStationDataDict>)
         );
     }
 

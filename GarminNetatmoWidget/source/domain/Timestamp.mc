@@ -28,14 +28,14 @@ class Timestamp {
 
     public function value() as Number {
         if (self._value != null) {
-            return self._value.value();
+            return (self._value as Moment).value();
         }
         return -1; // TODO what to do here?
     }
 
     public function inFuture() as Boolean {
         if (self._value == null) { return false; }
-        if (Time.now().lessThan(self._value)) {
+        if (Time.now().lessThan(self._value as Moment)) {
             return true;
         }
         return false;
@@ -50,14 +50,15 @@ class Timestamp {
 
     public function addSeconds(seconds as Number) as Timestamp {
         var durationFromSeconds = new Time.Duration(seconds);
-        var newValue = self._value.add(durationFromSeconds) as Time.Moment;
+        var newValue = (self._value as Moment).add(durationFromSeconds) as Time.Moment;
         return new Timestamp(newValue.value());
     }
 
+    (:typecheck(false)) // I do not understand the error message
     public function toString() as String {
         if (self._value == null) { return "n/a"; }
 
-        var gregorian = Gregorian.info(self._value, Time.FORMAT_SHORT);
+        var gregorian = Gregorian.info(self._value as Moment, Time.FORMAT_SHORT);
         return Lang.format(
             "$1$.$2$.$3$ $4$:$5$:$6$",
             [

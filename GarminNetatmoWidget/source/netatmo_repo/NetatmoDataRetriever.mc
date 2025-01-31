@@ -33,13 +33,13 @@ class StationsDataEndpoint {
         self._notificationConsumer = notificationConsumer;
     }
 
-    public function callAndThen(homesDataHandler as StationsDataConsumer) {
+    public function callAndThen(homesDataHandler as StationsDataConsumer) as Void {
         if (self._handler != null) {throw new OperationNotAllowedException("Handler already defined.");}
         self._handler = homesDataHandler;
         self._requestHomesData();
     }
 
-    private function _requestHomesData() {
+    private function _requestHomesData() as Void {
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {"Authorization" => ("Bearer " + self._accessToken)},
@@ -59,10 +59,14 @@ class StationsDataEndpoint {
     public function onReceiveHomesData(responseCode as Number, data as Dictionary or String or Null) as Void {
         if (responseCode == 200) {
             self._notificationConsumer.invoke(new Status("Data received, processing..."));
-            self._handler.invoke(self._mapResponseToMainStationData(data));
+            if (self._handler != null) {
+                (self._handler as StationsDataConsumer).invoke(self._mapResponseToMainStationData((data as Dictionary<String, String or Dictionary>)));
+            } else {
+                self._notificationConsumer.invoke(new NetatmoError("No StationsDataConsumer defined."));
+            }
         } else {
             var typedData = data as Dictionary<String, Dictionary<String, String or Number>>;
-            var error = typedData["error"];
+            var error = typedData["error"] as Dictionary<String, String or Number>;
             var error_code = error["code"] as Number;
             var error_msg = error["message"] as String;
             self._notificationConsumer.invoke(new WebRequestError("StationsData", responseCode, error_msg, error_code));
@@ -73,7 +77,7 @@ class StationsDataEndpoint {
 
     private function _mapResponseToMainStationData(data as Dictionary<String, String or Dictionary>) as  NetatmoStationsData {
         var body = data["body"] as Dictionary<String, Array or Dictionary>;
-        var rawDevices = body["devices"] as Array<Dictionary>;
+        var rawDevices = body["devices"] as Array<Dictionary<String, String or Number or Dictionary>>;
 
         var numberOfDevices = rawDevices.size();
         var devices = new Array[numberOfDevices] as Array<Device>;
@@ -84,7 +88,7 @@ class StationsDataEndpoint {
         return new NetatmoStationsData(devices);
     }
 
-    private function _mapDevice(device as Dictionary) as Device {
+    private function _mapDevice(device as Dictionary<String, String or Number or Dictionary>) as Device {
         var mainStation = self._mapToNetatmoStationData(device);
 
         var rawModules = device["modules"] as Array<Dictionary<String, String or Number or Dictionary>>;

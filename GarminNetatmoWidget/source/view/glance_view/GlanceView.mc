@@ -40,12 +40,12 @@ class GlanceView extends Ui.GlanceView {
     	dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
         var justification = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
         if (self._data != null) {
-            dc.drawText(0, 0.33 * dc.getHeight(), Graphics.FONT_SMALL, self._data.name(), justification);
-            var temp = self._data.temperature().toShortString();
-            var co2 = self._data.co2().toShortString();
+            dc.drawText(0, 0.33 * dc.getHeight(), Graphics.FONT_SMALL, (self._data as NetatmoStationData).name(), justification);
+            var temp = (self._data as NetatmoStationData).temperature().toShortString();
+            var co2 = (self._data as NetatmoStationData).co2().toShortString();
             dc.drawText(0, 0.75 * dc.getHeight(), Graphics.FONT_TINY, temp + " / " + co2, justification);
         } else if (self._notification != null) {
-            dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_TINY, self._notification.short(), justification);
+            dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_TINY, (self._notification as Notification).short(), justification);
         } else {
             dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_SMALL, "Starting...", justification);
         }

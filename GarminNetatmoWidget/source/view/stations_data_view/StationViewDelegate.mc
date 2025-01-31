@@ -5,7 +5,7 @@ class StationViewDelegate extends BehaviorDelegate {
     // see https://forums.garmin.com/developer/connect-iq/f/discussion/371941/switching-between-views
     // some Delegate is needed in the getView() call above, otherwise an Array out of Bounds error is thrown
 
-    private var _service;
+    private var _service as NetatmoService;
     private var _view as StationView;
 
     public function initialize(service as NetatmoService, view as StationView) {
@@ -31,7 +31,7 @@ class StationViewDelegate extends BehaviorDelegate {
     }
 
     public function onMenuItemSelected(item as MenuItem) as Void {
-        switch(item.getId()) {
+        switch(item.getId() as String) {
             case "default":
                 self._service.setDefaultStation(self._view.data());
                 WatchUi.popView(WatchUi.SLIDE_DOWN); // pops MenuView

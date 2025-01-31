@@ -12,7 +12,7 @@ class Pressure {
 
     public function toShortString() as String {
         if (self._value != null) {
-            return self._value.format("%.1f") + "mbar";
+            return (self._value as Float).format("%.1f") + "mbar";
         }
         return "n/a";
     }

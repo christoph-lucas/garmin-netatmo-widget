@@ -1,5 +1,6 @@
 using Toybox.Application.Storage;
 import Toybox.System;
+import Toybox.Lang;
 
 (:glance, :background)
 class NetatmoService {
@@ -38,7 +39,7 @@ class NetatmoService {
     }
 
     public function getDefaultStationId() as StationId? {
-        var rawId = Storage.getValue(DEFAULT_STATION_ID);
+        var rawId = Storage.getValue(DEFAULT_STATION_ID) as String;
         if (notEmpty(rawId)) { return new StationId(rawId); }
         return null;
     }

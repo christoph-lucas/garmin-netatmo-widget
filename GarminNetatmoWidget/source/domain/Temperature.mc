@@ -12,7 +12,7 @@ class Temperature {
 
     public function toShortString() as String {
         if (self._value != null) {
-            return self._value.format("%.1f") + "°C";
+            return (self._value as Float).format("%.1f") + "°C";
         }
         return "n/a";
     }

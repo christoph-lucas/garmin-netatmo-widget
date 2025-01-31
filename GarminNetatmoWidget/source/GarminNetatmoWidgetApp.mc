@@ -15,15 +15,15 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
     public function initialize() {
         AppBase.initialize();
         var netatmoClientAuthRaw = Application.loadResource(Rez.JsonData.netatmoClientAuth) as Dictionary<String, String>;
-        var netatmoClientAuth = new NetatmoClientAuth(netatmoClientAuthRaw["id"], netatmoClientAuthRaw["secret"]);
+        var netatmoClientAuth = new NetatmoClientAuth(netatmoClientAuthRaw["id"] as String, netatmoClientAuthRaw["secret"] as String);
         var config = new Config(
-            Properties.getValue("showTemp"),
-            Properties.getValue("showCO2"),
-            Properties.getValue("showHumidity"),
-            Properties.getValue("showPressure"),
-            Properties.getValue("showNoise"),
-            Properties.getValue("activateBackgroundLoading"),
-            Properties.getValue("backgroundRefreshInterval")
+            Properties.getValue("showTemp") as Boolean,
+            Properties.getValue("showCO2") as Boolean,
+            Properties.getValue("showHumidity") as Boolean,
+            Properties.getValue("showPressure") as Boolean,
+            Properties.getValue("showNoise") as Boolean,
+            Properties.getValue("activateBackgroundLoading") as Boolean,
+            Properties.getValue("backgroundRefreshInterval") as Number
         );
 
         // Dependency Injection
@@ -44,15 +44,18 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
 
     public function onStop(state as Dictionary?) as Void { }
 
+    (:typecheck([disableBackgroundCheck, disableGlanceCheck]))
     public function getInitialView() as [Views] or [Views, InputDelegates] {
         return getLoadingView(self._service);
     }
 
+    (:typecheck(disableBackgroundCheck))
     public function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {
         // https://developer.garmin.com/connect-iq/api-docs/Toybox/Application/AppBase.html#getGlanceView-instance_function
         return getNetatmoGlanceView(self._service);
     }
 
+    (:typecheck(disableGlanceCheck))
     public function getServiceDelegate() as [System.ServiceDelegate] {
         return [new BackgroundDelegate(self._service)];
     }
