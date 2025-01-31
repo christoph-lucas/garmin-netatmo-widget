@@ -1,6 +1,8 @@
 import Toybox.Lang;
 import Toybox.Time;
 
+// FIXME The mapping logic is now clearly in the wrong place, should be moved to the Netatmo package
+
 typedef DeviceDict as Dictionary<String, WeatherStationDataDict or Array<WeatherStationDataDict>>;
 typedef WeatherStationsDataDict as Dictionary<String, Array<DeviceDict>>;
 
