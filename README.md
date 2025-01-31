@@ -1,5 +1,13 @@
 # Netatmo Weather Station Data
 
+A simple widget that displays the data from Netatmo Weather Stations.
+
+If you find a bug or have an idea for a new feature, please consider creating a corresponding issues. I would love to hear about it.
+
+Disclaimer: This is NOT an official app from Netatmo. It is provided by myself as a private person doing this in my spare time without any warranty.
+
+Icon thanks to Iconfinder / Adri Ansyah.
+
 ## Requested permissions
 
 * Communication: load the data from Netatmo
