@@ -24,7 +24,8 @@ class WeatherStationsData {
     private var _devices as Array<Device>;
 
     public function initialize(devices as Array<Device>) {
-        self._devices = devices; // TODO copy array
+        self._devices = [] as Array<Device>;
+        self._devices.addAll(devices);
     }
 
     public function numberOfDevices() as Number {
@@ -81,7 +82,8 @@ class Device {
 
     public function initialize(mainStation as WeatherStationData, modules as Array<WeatherStationData>) {
         self._mainStation = mainStation;
-        self._modules = modules; // TODO copy array
+        self._modules = [] as Array<WeatherStationData>;
+        self._modules.addAll(modules);
     }
 
     public function mainStation() as WeatherStationData {
@@ -97,7 +99,9 @@ class Device {
     }
 
     public function allModules() as Array<WeatherStationData> {
-        return self._modules; // TODO return copy
+        var result = [] as Array<WeatherStationData>;
+        result.addAll(self._modules);
+        return result;
     }
 
     public function toDict() as DeviceDict {
