@@ -10,7 +10,7 @@ typedef DataLoader as Method(dataConsumer as DataConsumer, notificationConsumer 
 (:glance, :background)
 class GarminNetatmoWidgetApp extends Application.AppBase {
 
-    private var _service as NetatmoService;
+    private var _service as WeatherStationService;
 
     public function initialize() {
         AppBase.initialize();
@@ -30,7 +30,7 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
         var cache = new StationsDataCache();
         var connectionsFactory = new NetatmoConnectionsOrchastratorFactory(netatmoClientAuth, cache);
         var repo = new NetatmoRepository(cache, connectionsFactory);
-        self._service = new NetatmoService(config, repo);
+        self._service = new WeatherStationService(config, repo);
 
         // Backgrounding: https://developer.garmin.com/connect-iq/core-topics/backgrounding/
         if (config.activateBackgroundLoading()) {
@@ -64,9 +64,9 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
 (:background)
 class BackgroundDelegate extends System.ServiceDelegate {
 
-    private var _service as NetatmoService;
+    private var _service as WeatherStationService;
 
-    public function initialize(service as NetatmoService) {
+    public function initialize(service as WeatherStationService) {
         System.ServiceDelegate.initialize();
         self._service = service;
     }

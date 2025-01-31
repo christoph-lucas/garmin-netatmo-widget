@@ -5,11 +5,11 @@ import Toybox.WatchUi;
 class StationView extends WatchUi.View {
 
     private var _data as NetatmoStationData;
-    private var _service as NetatmoService;
+    private var _service as WeatherStationService;
     private var _reloadPending as Boolean;
     private var _config as Config;
 
-    function initialize(data as NetatmoStationData, service as NetatmoService) {
+    function initialize(data as NetatmoStationData, service as WeatherStationService) {
         View.initialize();
         self._data = data;
         self._service = service;

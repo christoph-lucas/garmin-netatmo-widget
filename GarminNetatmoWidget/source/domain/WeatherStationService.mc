@@ -3,7 +3,7 @@ import Toybox.System;
 import Toybox.Lang;
 
 (:glance, :background)
-class NetatmoService {
+class WeatherStationService {
     private var _config as Config;
     private var _repo as NetatmoRepository;
 

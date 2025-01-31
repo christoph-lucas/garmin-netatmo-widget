@@ -1,11 +1,11 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 
-function getLoadingView(service as NetatmoService) as [Views] {
+function getLoadingView(service as WeatherStationService) as [Views] {
     return [ new LoadingView(service) ];
 }
 
-function navigateToLoadingView(service as NetatmoService) as Void {
+function navigateToLoadingView(service as WeatherStationService) as Void {
     // NB if needed, we could accept some options here that influence how the data is loaded
     // -> currently the view will always load data in the same way when switched to it
     // is it wrong to load the data in onShow()? should we load the data in initialize?
@@ -14,10 +14,10 @@ function navigateToLoadingView(service as NetatmoService) as Void {
 
 class LoadingView extends WatchUi.View {
 
-    private var _service as NetatmoService;
+    private var _service as WeatherStationService;
     private var _busyIndicator as ProgressBar;
 
-    function initialize(service as NetatmoService) {
+    function initialize(service as WeatherStationService) {
         View.initialize();
         self._service = service;
 

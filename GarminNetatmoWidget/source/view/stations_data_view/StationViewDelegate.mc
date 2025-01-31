@@ -5,10 +5,10 @@ class StationViewDelegate extends BehaviorDelegate {
     // see https://forums.garmin.com/developer/connect-iq/f/discussion/371941/switching-between-views
     // some Delegate is needed in the getView() call above, otherwise an Array out of Bounds error is thrown
 
-    private var _service as NetatmoService;
+    private var _service as WeatherStationService;
     private var _view as StationView;
 
-    public function initialize(service as NetatmoService, view as StationView) {
+    public function initialize(service as WeatherStationService, view as StationView) {
         BehaviorDelegate.initialize();
         self._service = service;
         self._view = view;

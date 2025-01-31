@@ -1,7 +1,7 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 
-function navigateToNotificationView(service as NetatmoService, notification as Notification) as Void {
+function navigateToNotificationView(service as WeatherStationService, notification as Notification) as Void {
     WatchUi.switchToView(new NotificationView(notification), new NotificationViewDelegate(service), WatchUi.SLIDE_RIGHT);
 }
 

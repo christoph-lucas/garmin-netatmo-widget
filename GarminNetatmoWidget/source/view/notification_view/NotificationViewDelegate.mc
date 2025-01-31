@@ -4,9 +4,9 @@ import Toybox.Lang;
 
 class NotificationViewDelegate extends BehaviorDelegate {
 
-    private var _service as NetatmoService;
+    private var _service as WeatherStationService;
 
-    public function initialize(service as NetatmoService) {
+    public function initialize(service as WeatherStationService) {
         BehaviorDelegate.initialize();
         self._service = service;
     }

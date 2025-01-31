@@ -2,7 +2,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 
 (:glance)
-function getNetatmoGlanceView(service as NetatmoService) as [GlanceView] {
+function getNetatmoGlanceView(service as WeatherStationService) as [GlanceView] {
         return [ new GlanceView(service) ];
 }
 
@@ -11,9 +11,9 @@ class GlanceView extends Ui.GlanceView {
     
     private var _data as NetatmoStationData?;
     private var _notification as Notification?;
-    private var _service as NetatmoService;
+    private var _service as WeatherStationService;
 
-    public function initialize(service as NetatmoService) {
+    public function initialize(service as WeatherStationService) {
         GlanceView.initialize();
         self._service = service;
     }
