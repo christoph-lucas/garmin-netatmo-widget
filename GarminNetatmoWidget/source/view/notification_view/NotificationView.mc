@@ -27,7 +27,7 @@ class NotificationView extends WatchUi.View {
 
     private function _drawNotification(dc as Dc, notification as Notification) as Void {
         var text = "";
-        if (self._notification instanceof NetatmoError) { text += "😟\n"; }
+        if (self._notification instanceof WeatherStationError) { text += "😟\n"; }
         text += notification.long();
         var notificationTextArea = new WatchUi.TextArea({
             :text => text,

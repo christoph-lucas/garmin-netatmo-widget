@@ -55,7 +55,7 @@ class NetatmoAuthenticator {
         if (notEmpty(refreshToken)) {
             self._ensureAccessTokenValidity();
         } else {
-            self._notificationConsumer.invoke(new NetatmoError("Not authorized, illegal state."));
+            self._notificationConsumer.invoke(new WeatherStationError("Not authorized, illegal state."));
         }
     }
 
@@ -185,7 +185,7 @@ public class AuthenticationEndpoint {
             if (self._handler != null) {
                 (self._handler as AuthenticationCodeHandler).invoke(code);
             } else {
-                self._errorHandler.invoke(new NetatmoError("No AuthenticationCodeHandler defined."));
+                self._errorHandler.invoke(new WeatherStationError("No AuthenticationCodeHandler defined."));
             }
         } else {
             self._errorHandler.invoke(new WebRequestError("Authorize", 0, "Data missing.", ""));
@@ -249,7 +249,7 @@ public class TokensFromCodeEndpoint {
             if (self._handler != null) {
                 (self._handler as TokensHandler).invoke(refresh_token, accessToken, expires_in);
             } else {
-                self._errorHandler.invoke(new NetatmoError("No TokensHandler defined."));
+                self._errorHandler.invoke(new WeatherStationError("No TokensHandler defined."));
             }
         } else {
             var error = typedData["error"];
@@ -312,7 +312,7 @@ public class RefreshAccessTokenEndpoint {
             if (self._handler != null) {
                 (self._handler as TokensHandler).invoke(refresh_token, accessToken, expires_in);
             } else {
-                self._errorHandler.invoke(new NetatmoError("No TokensHandler defined."));
+                self._errorHandler.invoke(new WeatherStationError("No TokensHandler defined."));
             }
         } else {
             var error = typedData["error"];

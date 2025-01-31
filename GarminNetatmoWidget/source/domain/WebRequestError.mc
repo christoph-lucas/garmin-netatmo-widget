@@ -1,10 +1,10 @@
 import Toybox.Lang;
 
 (:glance, :background)
-class WebRequestError extends NetatmoError {
+class WebRequestError extends WeatherStationError {
 
     public function initialize(endpoint as String, responseCode as Number, errorMsg as String?, errorCode as Number or String or Null) {
-        NetatmoError.initialize(WebRequestError.getString(endpoint, responseCode, errorMsg, errorCode));
+        WeatherStationError.initialize(WebRequestError.getString(endpoint, responseCode, errorMsg, errorCode));
     }
 
     private static function getString(endpoint as String, responseCode as Number, errorMsg as String?, errorCode as Number or String or Null) as String {

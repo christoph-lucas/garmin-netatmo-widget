@@ -62,7 +62,7 @@ class StationsDataEndpoint {
             if (self._handler != null) {
                 (self._handler as StationsDataConsumer).invoke(self._mapResponseToMainStationData((data as Dictionary<String, String or Dictionary>)));
             } else {
-                self._notificationConsumer.invoke(new NetatmoError("No StationsDataConsumer defined."));
+                self._notificationConsumer.invoke(new WeatherStationError("No StationsDataConsumer defined."));
             }
         } else {
             var typedData = data as Dictionary<String, Dictionary<String, String or Number>>;

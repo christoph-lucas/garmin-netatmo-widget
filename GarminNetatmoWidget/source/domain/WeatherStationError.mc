@@ -1,7 +1,7 @@
 import Toybox.Lang;
 
 (:glance, :background)
-class NetatmoError { // implements Notification
+class WeatherStationError { // implements Notification
     private var _message as String;
 
     public function initialize(message as String) {

@@ -58,7 +58,7 @@ class NetatmoConnectionsOrchastrator {
 
     public function loadStationDataInBackground() as Void {
         if (!System.getDeviceSettings().connectionAvailable) {
-            self._notificationConsumer.invoke(new NetatmoError("No connection"));
+            self._notificationConsumer.invoke(new WeatherStationError("No connection"));
             return;
         }
 

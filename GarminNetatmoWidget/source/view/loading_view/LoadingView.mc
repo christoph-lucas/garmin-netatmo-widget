@@ -40,7 +40,7 @@ class LoadingView extends WatchUi.View {
     }
 
     public function onNotification(notification as Notification) as Void {
-        if (notification instanceof NetatmoError) {
+        if (notification instanceof WeatherStationError) {
             WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
             navigateToNotificationView(self._service, notification);
         } else {

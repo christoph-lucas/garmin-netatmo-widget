@@ -85,7 +85,7 @@ class BackgroundDelegate extends System.ServiceDelegate {
 
     // NotificationConsumer
     public function onNotificationReceived(notification as Notification) as Void {
-        if (notification instanceof NetatmoError) {
+        if (notification instanceof WeatherStationError) {
             // cannot load data for some reason
             Background.exit(false);
         }

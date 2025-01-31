@@ -26,7 +26,7 @@ class GlanceView extends Ui.GlanceView {
         if (data.numberOfDevices() > 0) {
             self._data = self._getSelectedStationData(data);
         } else {
-           self._notification = new NetatmoError("No data");
+           self._notification = new WeatherStationError("No data");
         }
         WatchUi.requestUpdate();    
     }
