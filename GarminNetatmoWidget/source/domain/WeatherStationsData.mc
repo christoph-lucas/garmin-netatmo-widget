@@ -1,15 +1,15 @@
 import Toybox.Lang;
 import Toybox.Time;
 
-typedef DeviceDict as Dictionary<String, NetatmoStationDataDict or Array<NetatmoStationDataDict>>;
-typedef NetatmoStationsDataDict as Dictionary<String, Array<DeviceDict>>;
+typedef DeviceDict as Dictionary<String, WeatherStationDataDict or Array<WeatherStationDataDict>>;
+typedef WeatherStationsDataDict as Dictionary<String, Array<DeviceDict>>;
 
 (:glance, :background)
-class NetatmoStationsData {
+class WeatherStationsData {
 
-    public static function fromDict(dict as NetatmoStationsDataDict) as NetatmoStationsData {
-        return new NetatmoStationsData(
-            NetatmoStationsData._devicesFromArray(dict["devices"] as Array<DeviceDict>)
+    public static function fromDict(dict as WeatherStationsDataDict) as WeatherStationsData {
+        return new WeatherStationsData(
+            WeatherStationsData._devicesFromArray(dict["devices"] as Array<DeviceDict>)
         );
     }
 
@@ -35,8 +35,8 @@ class NetatmoStationsData {
         return self._devices[index];
     }
 
-    public function allStations() as Array<NetatmoStationData> {
-        var allStations = [] as Array<NetatmoStationData>;
+    public function allStations() as Array<WeatherStationData> {
+        var allStations = [] as Array<WeatherStationData>;
         for (var i = 0; i<self._devices.size(); i++) {
             allStations.add(self._devices[i].mainStation());
             allStations.addAll(self._devices[i].allModules());
@@ -44,7 +44,7 @@ class NetatmoStationsData {
         return allStations;
     }
 
-    public function toDict() as NetatmoStationsDataDict {
+    public function toDict() as WeatherStationsDataDict {
         return {"devices" => self._devicesToDict()};
     }
 
@@ -63,28 +63,28 @@ class Device {
 
     public static function fromDict(dict as DeviceDict) as Device {
         return new Device(
-            NetatmoStationData.fromDict(dict["mainStation"] as NetatmoStationDataDict),
-            Device._modulesFromArray(dict["modules"] as Array<NetatmoStationDataDict>)
+            WeatherStationData.fromDict(dict["mainStation"] as WeatherStationDataDict),
+            Device._modulesFromArray(dict["modules"] as Array<WeatherStationDataDict>)
         );
     }
 
-    private static function _modulesFromArray(dataArray as Array<NetatmoStationDataDict>) as Array<NetatmoStationData> {
-        var result = new[dataArray.size()] as Array<NetatmoStationData>;
+    private static function _modulesFromArray(dataArray as Array<WeatherStationDataDict>) as Array<WeatherStationData> {
+        var result = new[dataArray.size()] as Array<WeatherStationData>;
         for (var i = 0; i < dataArray.size(); i++) {
-            result[i] = NetatmoStationData.fromDict(dataArray[i]);
+            result[i] = WeatherStationData.fromDict(dataArray[i]);
         }
         return result;
     }
 
-    private var _mainStation as NetatmoStationData;
-    private var _modules as Array<NetatmoStationData>;
+    private var _mainStation as WeatherStationData;
+    private var _modules as Array<WeatherStationData>;
 
-    public function initialize(mainStation as NetatmoStationData, modules as Array<NetatmoStationData>) {
+    public function initialize(mainStation as WeatherStationData, modules as Array<WeatherStationData>) {
         self._mainStation = mainStation;
         self._modules = modules; // TODO copy array
     }
 
-    public function mainStation() as NetatmoStationData {
+    public function mainStation() as WeatherStationData {
         return self._mainStation;
     }
 
@@ -92,11 +92,11 @@ class Device {
         return self._modules.size();
     }
 
-    public function getModule(index as Number) as NetatmoStationData {
+    public function getModule(index as Number) as WeatherStationData {
         return self._modules[index];
     }
 
-    public function allModules() as Array<NetatmoStationData> {
+    public function allModules() as Array<WeatherStationData> {
         return self._modules; // TODO return copy
     }
 
@@ -107,8 +107,8 @@ class Device {
         };
     }
 
-    private function _modulesToDict() as Array<NetatmoStationDataDict> {
-        var result = new[self._modules.size()] as Array<NetatmoStationDataDict>;
+    private function _modulesToDict() as Array<WeatherStationDataDict> {
+        var result = new[self._modules.size()] as Array<WeatherStationDataDict>;
         for (var i = 0; i < self._modules.size(); i++) {
             result[i] = self._modules[i].toDict();
         }

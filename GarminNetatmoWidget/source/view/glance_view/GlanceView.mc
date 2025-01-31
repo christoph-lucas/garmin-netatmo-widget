@@ -9,7 +9,7 @@ function getNetatmoGlanceView(service as WeatherStationService) as [GlanceView] 
 (:glance)
 class GlanceView extends Ui.GlanceView {
     
-    private var _data as NetatmoStationData?;
+    private var _data as WeatherStationData?;
     private var _notification as Notification?;
     private var _service as WeatherStationService;
 
@@ -22,7 +22,7 @@ class GlanceView extends Ui.GlanceView {
         self._service.loadStationData(method(:onDataLoaded), method(:onNotification));
     }
 
-    public function onDataLoaded(data as NetatmoStationsData) as Void {
+    public function onDataLoaded(data as WeatherStationsData) as Void {
         if (data.numberOfDevices() > 0) {
             self._data = self._getSelectedStationData(data);
         } else {
@@ -40,9 +40,9 @@ class GlanceView extends Ui.GlanceView {
     	dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
         var justification = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
         if (self._data != null) {
-            dc.drawText(0, 0.33 * dc.getHeight(), Graphics.FONT_SMALL, (self._data as NetatmoStationData).name(), justification);
-            var temp = (self._data as NetatmoStationData).temperature().toShortString();
-            var co2 = (self._data as NetatmoStationData).co2().toShortString();
+            dc.drawText(0, 0.33 * dc.getHeight(), Graphics.FONT_SMALL, (self._data as WeatherStationData).name(), justification);
+            var temp = (self._data as WeatherStationData).temperature().toShortString();
+            var co2 = (self._data as WeatherStationData).co2().toShortString();
             dc.drawText(0, 0.75 * dc.getHeight(), Graphics.FONT_TINY, temp + " / " + co2, justification);
         } else if (self._notification != null) {
             dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_TINY, (self._notification as Notification).short(), justification);
@@ -51,7 +51,7 @@ class GlanceView extends Ui.GlanceView {
         }
     }
 
-    private function _getSelectedStationData(data as NetatmoStationsData) as NetatmoStationData {
+    private function _getSelectedStationData(data as WeatherStationsData) as WeatherStationData {
         var selectedId = self._service.getDefaultStationId() as StationId?;
         if (selectedId != null) {
             var allStations = data.allStations();

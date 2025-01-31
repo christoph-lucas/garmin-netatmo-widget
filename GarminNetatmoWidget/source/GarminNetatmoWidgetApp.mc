@@ -76,7 +76,7 @@ class BackgroundDelegate extends System.ServiceDelegate {
     }
 
     // DataConsumer
-    public function onDataReceived(data as NetatmoStationsData) as Void {
+    public function onDataReceived(data as WeatherStationsData) as Void {
         // FIXME trigger display update in Glance View and StationsDataView
         // -> not so easy since it does not exist in the app, would require a publisher observer, probably in the Service (the views register themselves as observer, services publishes "new data" events)
         // -> not sure if it is worth it, since most people will not keep the app open

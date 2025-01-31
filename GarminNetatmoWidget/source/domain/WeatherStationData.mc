@@ -1,12 +1,12 @@
 import Toybox.Lang;
 
-typedef NetatmoStationDataDict as Dictionary<String, String or Number or Float or Null>;
+typedef WeatherStationDataDict as Dictionary<String, String or Number or Float or Null>;
 
 (:glance, :background)
-class NetatmoStationData {
+class WeatherStationData {
 
-    public static function fromDict(dict as NetatmoStationDataDict) as NetatmoStationData {
-        return new NetatmoStationData(
+    public static function fromDict(dict as WeatherStationDataDict) as WeatherStationData {
+        return new WeatherStationData(
             new StationId(dict["id"] as String),
             dict["name"] as String,
             new Timestamp(dict["measurementTimestamp"] as Number?),
@@ -48,7 +48,7 @@ class NetatmoStationData {
     public function pressure() as Pressure { return self._pressure; }
     public function noise() as Noise { return self._noise; }
 
-    public function toDict() as NetatmoStationDataDict {
+    public function toDict() as WeatherStationDataDict {
         return {
             "id" => self._id.value(),
             "name" => self._name,

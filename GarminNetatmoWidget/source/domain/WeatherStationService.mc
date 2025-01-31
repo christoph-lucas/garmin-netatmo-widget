@@ -34,7 +34,7 @@ class WeatherStationService {
         }
     }
 
-    public function setDefaultStation(data as NetatmoStationData) as Void {
+    public function setDefaultStation(data as WeatherStationData) as Void {
         Storage.setValue(DEFAULT_STATION_ID, data.id().value());
     }
 

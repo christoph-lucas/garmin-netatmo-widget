@@ -10,21 +10,21 @@ public class StationsDataCache {
 
     public function initialize() { }
 
-    public function store(data as NetatmoStationsData) as Void {
-        var mappedValue = data.toDict() as NetatmoStationsDataDict;
+    public function store(data as WeatherStationsData) as Void {
+        var mappedValue = data.toDict() as WeatherStationsDataDict;
         Storage.setValue(STATIONS_DATA_CACHE, mappedValue as Dictionary<PropertyKeyType, PropertyValueType>);
 
         var validUntil = self._computeValidUntil(data) as Timestamp;
         Storage.setValue(STATIONS_DATA_CACHE_VALID_UNTIL, validUntil.value());
     }
 
-    public function get() as NetatmoStationsDataWithValidity? {
+    public function get() as WeatherStationsDataWithValidity? {
         var mappedValue = Storage.getValue(STATIONS_DATA_CACHE) as Dictionary?;
         if (mappedValue != null) {
             var validUntil = Storage.getValue(STATIONS_DATA_CACHE_VALID_UNTIL) as Number?;
             if (validUntil != null) {
-                return new NetatmoStationsDataWithValidity(
-                    NetatmoStationsData.fromDict(mappedValue as NetatmoStationsDataDict),
+                return new WeatherStationsDataWithValidity(
+                    WeatherStationsData.fromDict(mappedValue as WeatherStationsDataDict),
                     new Timestamp(validUntil)
                 );
             }
@@ -37,7 +37,7 @@ public class StationsDataCache {
         Storage.deleteValue(STATIONS_DATA_CACHE_VALID_UNTIL);
     }
 
-    private function _computeValidUntil(data as NetatmoStationsData) as Timestamp {
+    private function _computeValidUntil(data as WeatherStationsData) as Timestamp {
         var now = Timestamp.now();
         var stations = data.allStations();
         var oldestMeasurement = now;
@@ -49,15 +49,15 @@ public class StationsDataCache {
 }
 
 (:glance, :background)
-public class NetatmoStationsDataWithValidity {
-    private var _data as NetatmoStationsData;
+public class WeatherStationsDataWithValidity {
+    private var _data as WeatherStationsData;
     private var _validUntil as Timestamp;
 
-    public function initialize(data as NetatmoStationsData, validUntil as Timestamp) {
+    public function initialize(data as WeatherStationsData, validUntil as Timestamp) {
         self._data = data;
         self._validUntil = validUntil;
     }
 
-    public function data() as NetatmoStationsData { return self._data; }
+    public function data() as WeatherStationsData { return self._data; }
     public function isValid() as Boolean { return self._validUntil.inFuture(); }
 }

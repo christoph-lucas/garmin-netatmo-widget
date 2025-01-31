@@ -1,7 +1,7 @@
 import Toybox.Lang;
 import Toybox.System;
 
-typedef DataConsumer as Method(data as NetatmoStationsData) as Void;
+typedef DataConsumer as Method(data as WeatherStationsData) as Void;
 typedef NotificationConsumer as Method(notification as Notification) as Void;
 
 (:glance, :background)
@@ -38,7 +38,7 @@ class NetatmoConnectionsOrchastrator {
     }
 
     public function loadStationData() as Void {
-        var cachedData = self._cache.get() as NetatmoStationsDataWithValidity?;
+        var cachedData = self._cache.get() as WeatherStationsDataWithValidity?;
         if (cachedData != null && cachedData.isValid()) {
             self._dataConsumer.invoke(cachedData.data());
             return;
@@ -62,7 +62,7 @@ class NetatmoConnectionsOrchastrator {
             return;
         }
 
-        var cachedData = self._cache.get() as NetatmoStationsDataWithValidity?;
+        var cachedData = self._cache.get() as WeatherStationsDataWithValidity?;
         if (cachedData != null && cachedData.isValid()) {
             self._dataConsumer.invoke(cachedData.data());
             return;
@@ -77,7 +77,7 @@ class NetatmoConnectionsOrchastrator {
         self._retriever.loadData(accessToken);
     }
 
-    public function cachingDataConsumer(data as NetatmoStationsData) as Void {
+    public function cachingDataConsumer(data as WeatherStationsData) as Void {
         self._cache.store(data);
         self._dataConsumer.invoke(data);
     }

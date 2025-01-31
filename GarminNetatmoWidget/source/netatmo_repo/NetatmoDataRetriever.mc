@@ -1,7 +1,7 @@
 import Toybox.Lang;
 import Toybox.Time;
 
-typedef StationsDataConsumer as Method(data as NetatmoStationsData) as Void;
+typedef StationsDataConsumer as Method(data as WeatherStationsData) as Void;
 
 (:glance, :background)
 class NetatmoDataRetriever {
@@ -75,7 +75,7 @@ class StationsDataEndpoint {
 
     // FIXME move to separate dedicated Mapper?
 
-    private function _mapResponseToMainStationData(data as Dictionary<String, String or Dictionary>) as  NetatmoStationsData {
+    private function _mapResponseToMainStationData(data as Dictionary<String, String or Dictionary>) as  WeatherStationsData {
         var body = data["body"] as Dictionary<String, Array or Dictionary>;
         var rawDevices = body["devices"] as Array<Dictionary<String, String or Number or Dictionary>>;
 
@@ -85,23 +85,23 @@ class StationsDataEndpoint {
             devices[i] = self._mapDevice(rawDevices[i]);
         }
 
-        return new NetatmoStationsData(devices);
+        return new WeatherStationsData(devices);
     }
 
     private function _mapDevice(device as Dictionary<String, String or Number or Dictionary>) as Device {
-        var mainStation = self._mapToNetatmoStationData(device);
+        var mainStation = self._mapToWeatherStationData(device);
 
         var rawModules = device["modules"] as Array<Dictionary<String, String or Number or Dictionary>>;
         var numberOfModules = rawModules.size();
-        var modules = new Array[numberOfModules] as Array<NetatmoStationData>;
+        var modules = new Array[numberOfModules] as Array<WeatherStationData>;
         for (var i = 0; i<numberOfModules; i++) {
-            modules[i] = self._mapToNetatmoStationData(rawModules[i]);
+            modules[i] = self._mapToWeatherStationData(rawModules[i]);
         }
 
         return new Device(mainStation, modules);
     }
 
-    private function _mapToNetatmoStationData(dict as Dictionary<String, String or Number or Dictionary>) as NetatmoStationData {
+    private function _mapToWeatherStationData(dict as Dictionary<String, String or Number or Dictionary>) as WeatherStationData {
         // the device and each module share the same structure in the response
         var dashboardData = dict["dashboard_data"] as Dictionary?;
 
@@ -114,12 +114,12 @@ class StationsDataEndpoint {
             var humidity = dashboardData["Humidity"] as Number?;
             var pressure = dashboardData["Pressure"] as Float?;
             var noise = dashboardData["Noise"] as Number?;
-            return new NetatmoStationData(id, name, new Timestamp(measurementTimestamp), 
+            return new WeatherStationData(id, name, new Timestamp(measurementTimestamp), 
                 new Temperature(temp), new CO2(co2), new Humidity(humidity), new Pressure(pressure), new Noise(noise));
         }
 
         // if station is not connected, there is no dashboard data
-        return new NetatmoStationData(id, name, new Timestamp(null), new Temperature(null), new CO2(null), new Humidity(null), new Pressure(null), new Noise(null));
+        return new WeatherStationData(id, name, new Timestamp(null), new Temperature(null), new CO2(null), new Humidity(null), new Pressure(null), new Noise(null));
     }
 
 }

@@ -34,7 +34,7 @@ class LoadingView extends WatchUi.View {
         self._service.loadStationData(method(:onDataLoaded), method(:onNotification));
     }
 
-    public function onDataLoaded(data as NetatmoStationsData) as Void {
+    public function onDataLoaded(data as WeatherStationsData) as Void {
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
         navigateToStationsDataView(data, self._service);
     }
