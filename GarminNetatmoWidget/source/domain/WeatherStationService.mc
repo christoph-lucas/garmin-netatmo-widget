@@ -5,9 +5,9 @@ import Toybox.Lang;
 (:glance, :background)
 class WeatherStationService {
     private var _config as Config;
-    private var _repo as NetatmoRepository;
+    private var _repo as WeatherStationRepository;
 
-    public function initialize(config as Config, repo as NetatmoRepository) {
+    public function initialize(config as Config, repo as WeatherStationRepository) {
         self._config = config;
         self._repo = repo;
     }

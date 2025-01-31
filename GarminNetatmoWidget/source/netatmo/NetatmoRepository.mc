@@ -2,7 +2,7 @@ using Toybox.Application.Storage;
 import Toybox.System;
 
 (:glance, :background)
-public class NetatmoRepository {
+public class NetatmoRepository { // implements WeatherStationRepository
 
     private var _cache as StationsDataCache;
     private var _connectionsFactory as NetatmoConnectionsOrchastratorFactory;
