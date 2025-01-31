@@ -1,11 +1,10 @@
 import Toybox.Lang;
 
 (:glance, :background)
-class NetatmoError extends Notification {
+class NetatmoError { // implements Notification
     private var _message as String;
 
     public function initialize(message as String) {
-        Notification.initialize();
         self._message = message;
     }
 

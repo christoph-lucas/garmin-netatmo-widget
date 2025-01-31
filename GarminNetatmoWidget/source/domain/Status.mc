@@ -1,11 +1,10 @@
 import Toybox.Lang;
 
 (:glance, :background)
-class Status extends Notification {
+class Status { // implements Notification
     private var _status as String;
 
     public function initialize(status as String) {
-        Notification.initialize();
         self._status = status;
     }
 
