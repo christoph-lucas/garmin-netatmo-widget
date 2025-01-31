@@ -30,7 +30,7 @@ class Timestamp {
         if (self._value != null) {
             return (self._value as Moment).value();
         }
-        return -1; // TODO what to do here?
+        return -1;
     }
 
     public function inFuture() as Boolean {

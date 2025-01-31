@@ -8,6 +8,6 @@ class Status { // implements Notification
         self._status = status;
     }
 
-    public function short() as String {return self._status; } // TODO remove line breaks
+    public function short() as String {return self._status; }
     public function long() as String {return self._status; }
 }
