@@ -73,8 +73,6 @@ class StationsDataEndpoint {
         }
     }
 
-    // FIXME move to separate dedicated Mapper?
-
     private function _mapResponseToMainStationData(data as Dictionary<String, String or Dictionary>) as  WeatherStationsData {
         var body = data["body"] as Dictionary<String, Array or Dictionary>;
         var rawDevices = body["devices"] as Array<Dictionary<String, String or Number or Dictionary>>;

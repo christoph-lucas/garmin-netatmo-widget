@@ -14,7 +14,6 @@ class NotificationViewDelegate extends BehaviorDelegate {
     public function onSelect() as Boolean {
         var menu = new WatchUi.Menu2({:title => "Menu"});
 
-        // FIXME these menu items and the handling below should be DRYed
         menu.addItem(new WatchUi.MenuItem("Reload", "Clear cache and reload.", "reload", null));
         menu.addItem(new WatchUi.MenuItem("Reauth", "Reauthenticate with Netatmo.", "reauth", null));
         WatchUi.pushView(menu, new GenericMenuDelegate(method(:onMenuItemSelected)), WatchUi.SLIDE_UP);
