@@ -52,7 +52,7 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
     (:typecheck(disableBackgroundCheck))
     public function  getGlanceView() as [ WatchUi.GlanceView ] or [ WatchUi.GlanceView, WatchUi.GlanceViewDelegate ] or Null {
         // https://developer.garmin.com/connect-iq/api-docs/Toybox/Application/AppBase.html#getGlanceView-instance_function
-        return getNetatmoGlanceView(self._service);
+        return getWeatherStationGlanceView(self._service);
     }
 
     (:typecheck(disableGlanceCheck))

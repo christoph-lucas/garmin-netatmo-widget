@@ -2,7 +2,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 
 (:glance)
-function getNetatmoGlanceView(service as WeatherStationService) as [GlanceView] {
+function getWeatherStationGlanceView(service as WeatherStationService) as [GlanceView] {
         return [ new GlanceView(service) ];
 }
 
