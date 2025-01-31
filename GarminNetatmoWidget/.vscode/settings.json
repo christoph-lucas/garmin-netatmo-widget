@@ -1,5 +1,5 @@
 {
-    "monkeyC.testDevices": [
-        "fr265s"
-    ]
+    "monkeyC.typeCheckLevel": "Strict",
+    "editor.defaultFormatter": "Garmin.monkey-c",
+    "git.openRepositoryInParentFolders": "always",
 }
