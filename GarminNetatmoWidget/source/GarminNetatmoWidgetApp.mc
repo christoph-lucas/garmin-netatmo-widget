@@ -40,6 +40,10 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
         }
     }
 
+    public function onAppUpdate() as Void {
+        self._service.clearCacheIfConnected();
+    }
+
     public function onStart(state as Dictionary?) as Void { }
 
     public function onStop(state as Dictionary?) as Void { }
