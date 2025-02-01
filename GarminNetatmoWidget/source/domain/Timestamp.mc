@@ -26,11 +26,11 @@ class Timestamp {
         }
     }
 
-    public function value() as Number {
+    public function value() as Number? {
         if (self._value != null) {
             return (self._value as Moment).value();
         }
-        return -1;
+        return null;
     }
 
     public function inFuture() as Boolean {
@@ -43,7 +43,8 @@ class Timestamp {
 
     public function min(other as Timestamp?) as Timestamp {
         if (other == null) { return self; }
-        if (other.value() < 0 ) { return self; }
+        if (other.value() == null) { return self; }
+        if (self.value() == null) { return other; }
         if (other.value() < self.value()) { return other; }
         return self;
     }
@@ -75,7 +76,8 @@ class Timestamp {
     public function equals(other as Object?) as Boolean {
         if (other == null) { return false; }
         if (other instanceof Timestamp) {
-            return self.value().equals(other.value());
+            if (self.value() == null or other.value() == null) { return false; }
+            return (self.value() as Number).equals((other.value() as Number));
         }
         return false;
     }

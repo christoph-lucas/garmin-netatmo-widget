@@ -80,4 +80,59 @@ public class TimestampTest {
 
     }
 
+    public class SerialisationTest {
+        (:test)
+        public static function shouldSerialiseAndDesarialiseToSame(logger as Logger) as Boolean {
+            var time = new Timestamp(123);
+
+            var result = new Timestamp(time.value());
+
+            return result.equals(time);
+        }
+
+        (:test)
+        public static function shouldNotThrowForNull(logger as Logger) as Boolean {
+            var time = new Timestamp(null);
+            new Timestamp(time.value());
+            return true;
+        }
+    }
+
+    public class EqualityTest {
+        (:test)
+        public static function shouldBeEqualIfBothValuesPresent(logger as Logger) as Boolean {
+            var time1 = new Timestamp(123);
+            var time2 = new Timestamp(123);
+            return time1.equals(time2);
+        }
+
+        (:test)
+        public static function shouldNotBeEqualIfOtherIsNull(logger as Logger) as Boolean {
+            var time1 = new Timestamp(123);
+            return !time1.equals(null);
+        }
+
+        (:test)
+        public static function shouldNotBeEqualIfOtherIsEmpty(logger as Logger) as Boolean {
+            var time1 = new Timestamp(123);
+            var time2 = new Timestamp(null);
+            return !time1.equals(time2);
+        }
+
+        (:test)
+        public static function shouldNotBeEqualIfThisIsEmpty(logger as Logger) as Boolean {
+            var time1 = new Timestamp(null);
+            var time2 = new Timestamp(123);
+            return !time1.equals(time2);
+        }
+
+        (:test)
+        public static function shouldNotBeEqualIfBothAreEmpty(logger as Logger) as Boolean {
+            var time1 = new Timestamp(null);
+            var time2 = new Timestamp(null);
+            return !time1.equals(time2);
+        }
+
+    }
+
 }
