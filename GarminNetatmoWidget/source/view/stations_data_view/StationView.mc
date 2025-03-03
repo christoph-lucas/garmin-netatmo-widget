@@ -44,6 +44,15 @@ class StationView extends WatchUi.View {
         if (self._config.showNoise() and self._data.noise().isPresent()) {
             displayString += "\n" + self._data.noise().toLongString();
         }
+        if (self._config.showRain() and self._data.rain().isPresent()) {
+            displayString += "\n" + self._data.rain().toLongString();
+        }
+        if (self._config.showRain1h() and self._data.rain1h().isPresent()) {
+            displayString += "\n" + self._data.rain1h().toLongString();
+        }
+        if (self._config.showRain24h() and self._data.rain24h().isPresent()) {
+            displayString += "\n" + self._data.rain24h().toLongString();
+        }
         
         var textArea = new WatchUi.TextArea({
             :text => displayString,
