@@ -112,9 +112,9 @@ class StationsDataEndpoint {
             var humidity = dashboardData["Humidity"] as Number?;
             var pressure = dashboardData["Pressure"] as Float?;
             var noise = dashboardData["Noise"] as Number?;
-            var rain = dashboardData["Rain"] as Number?;
-            var rain1h = dashboardData["sum_rain_1"] as Number?;
-            var rain24h = dashboardData["sum_rain_24"] as Number?;
+            var rain = dashboardData["Rain"] as Float?;
+            var rain1h = dashboardData["sum_rain_1"] as Float?;
+            var rain24h = dashboardData["sum_rain_24"] as Float?;
             return new WeatherStationData(id, name, new Timestamp(measurementTimestamp), 
                 new Temperature(temp), new CO2(co2), new Humidity(humidity), new Pressure(pressure), new Noise(noise),
                 new Rain(rain, RAIN_TYPE_NOW), new Rain(rain1h, RAIN_TYPE_LAST_1H), new Rain(rain24h, RAIN_TYPE_LAST_24H));

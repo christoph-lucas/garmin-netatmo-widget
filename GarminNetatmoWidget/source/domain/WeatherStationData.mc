@@ -15,9 +15,9 @@ class WeatherStationData {
             new Humidity(dict["humidity"] as Number?),
             new Pressure(dict["pressure"] as Float?),
             new Noise(dict["noise"] as Number?),
-            new Rain(dict["rain"] as Number?, RAIN_TYPE_NOW),
-            new Rain(dict["rain1h"] as Number?, RAIN_TYPE_LAST_1H),
-            new Rain(dict["rain24h"] as Number?, RAIN_TYPE_LAST_24H)
+            new Rain(dict["rain"] as Float?, RAIN_TYPE_NOW),
+            new Rain(dict["rain1h"] as Float?, RAIN_TYPE_LAST_1H),
+            new Rain(dict["rain24h"] as Float?, RAIN_TYPE_LAST_24H)
         );
     }
 

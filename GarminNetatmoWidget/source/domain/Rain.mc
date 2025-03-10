@@ -9,10 +9,10 @@ public enum RainType {
 
 (:glance, :background)
 class Rain {
-    private var _value as Number?;
+    private var _value as Float?;
     private var _type as RainType;
 
-    public function initialize(value as Number?, type as RainType) {
+    public function initialize(value as Float?, type as RainType) {
         self._value = value;
         self._type = type;
     }
@@ -21,7 +21,7 @@ class Rain {
 
     public function toShortString() as String {
         if (self._value != null) {
-            return self._value + "mm";
+            return (self._value as Float).format("%.1f") + "mm";
         }
         return "n/a";
     }
@@ -42,5 +42,5 @@ class Rain {
         return "n/a";
     }
 
-    public function value() as Number? { return self._value; }
+    public function value() as Float? { return self._value; }
 }
