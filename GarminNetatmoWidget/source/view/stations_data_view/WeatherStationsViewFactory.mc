@@ -24,7 +24,7 @@ class WeatherStationsViewFactory extends ViewLoopFactory {
         return self._allLoopItems.size();
     }
 
-    public function getView(page as Number) as [ View ] or [ View, BehaviorDelegate ]  {
+    public function getView(page as Number) {
         var loopItem = self._allLoopItems[page];
         return [loopItem.view(), loopItem.delegate()];
     }
