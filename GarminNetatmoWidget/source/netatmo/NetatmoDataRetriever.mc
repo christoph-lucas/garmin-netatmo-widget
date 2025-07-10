@@ -115,14 +115,20 @@ class StationsDataEndpoint {
             var rain = dashboardData["Rain"] as Float?;
             var rain1h = dashboardData["sum_rain_1"] as Float?;
             var rain24h = dashboardData["sum_rain_24"] as Float?;
+            var windStrength = dashboardData["WindStrength"] as Float?;
+            var windAngle = dashboardData["WindAngle"] as Float?;
+            var gustStrength = dashboardData["GustStrength"] as Float?;
+            var gustAngle = dashboardData["GustAngle"] as Float?;
             return new WeatherStationData(id, name, new Timestamp(measurementTimestamp), 
                 new Temperature(temp), new CO2(co2), new Humidity(humidity), new Pressure(pressure), new Noise(noise),
-                new Rain(rain, RAIN_TYPE_NOW), new Rain(rain1h, RAIN_TYPE_LAST_1H), new Rain(rain24h, RAIN_TYPE_LAST_24H));
+                new Rain(rain, RAIN_TYPE_NOW), new Rain(rain1h, RAIN_TYPE_LAST_1H), new Rain(rain24h, RAIN_TYPE_LAST_24H),
+                new Wind(windStrength, windAngle, WIND_TYPE_WIND), new Wind(gustStrength, gustAngle, WIND_TYPE_GUST));
         }
 
         // if station is not connected, there is no dashboard data
         return new WeatherStationData(id, name, new Timestamp(null), new Temperature(null), new CO2(null), new Humidity(null), new Pressure(null), new Noise(null),
-            new Rain(null, RAIN_TYPE_NOW), new Rain(null, RAIN_TYPE_LAST_1H), new Rain(null, RAIN_TYPE_LAST_24H));
+            new Rain(null, RAIN_TYPE_NOW), new Rain(null, RAIN_TYPE_LAST_1H), new Rain(null, RAIN_TYPE_LAST_24H),
+            new Wind(null, null, WIND_TYPE_WIND), new Wind(null, null, WIND_TYPE_GUST));
     }
 
 }

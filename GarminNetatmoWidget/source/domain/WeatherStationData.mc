@@ -17,7 +17,9 @@ class WeatherStationData {
             new Noise(dict["noise"] as Number?),
             new Rain(dict["rain"] as Float?, RAIN_TYPE_NOW),
             new Rain(dict["rain1h"] as Float?, RAIN_TYPE_LAST_1H),
-            new Rain(dict["rain24h"] as Float?, RAIN_TYPE_LAST_24H)
+            new Rain(dict["rain24h"] as Float?, RAIN_TYPE_LAST_24H),
+            new Wind(dict["wind.strength"] as Float?, dict["wind.angle"] as Float?, WIND_TYPE_WIND),
+            new Wind(dict["gust.strength"] as Float?, dict["gust.angle"] as Float?, WIND_TYPE_GUST)
         );
     }
 
@@ -32,10 +34,12 @@ class WeatherStationData {
     private var _rain as Rain;
     private var _rain1h as Rain;
     private var _rain24h as Rain;
+    private var _wind as Wind;
+    private var _gust as Wind;
 
     public function initialize(id as StationId, name as String, measurementTimestamp as Timestamp, 
         temperature as Temperature, co2 as CO2, humidity as Humidity, pressure as Pressure, noise as Noise,
-        rain as Rain, rain1h as Rain, rain24h as Rain) {
+        rain as Rain, rain1h as Rain, rain24h as Rain, wind as Wind, gust as Wind) {
         self._id = id;
         self._name = name;
         self._measurementTimestamp = measurementTimestamp;
@@ -47,6 +51,8 @@ class WeatherStationData {
         self._rain = rain;
         self._rain1h = rain1h;
         self._rain24h = rain24h;
+        self._wind = wind;
+        self._gust = gust;
     }
 
     public function id() as StationId { return self._id; }
@@ -60,6 +66,8 @@ class WeatherStationData {
     public function rain() as Rain { return self._rain; }
     public function rain1h() as Rain { return self._rain1h; }
     public function rain24h() as Rain { return self._rain24h; }
+    public function wind() as Wind { return self._wind; }
+    public function gust() as Wind { return self._gust; }
 
     public function toDict() as WeatherStationDataDict {
         return {
@@ -74,6 +82,10 @@ class WeatherStationData {
             "rain" => self._rain.value(),
             "rain1h" => self._rain1h.value(),
             "rain24h" => self._rain24h.value(),
+            "wind.strength" => self._wind.strength(),
+            "wind.angle" => self._wind.angle(),
+            "gust.strength" => self._gust.strength(),
+            "gust.angle" => self._gust.angle(),
         };
     }
 

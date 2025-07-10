@@ -10,11 +10,13 @@ class Config {
     private var _showRain as Boolean;
     private var _showRain1h as Boolean;
     private var _showRain24h as Boolean;
+    private var _showWind as Boolean;
+    private var _showGust as Boolean;
     private var _activateBackgroundLoading as Boolean;
     private var _backgroundRefreshInterval as Number;
 
     public function initialize(showTemp as Boolean, showCO2 as Boolean, showHumidity as Boolean, showPressure as Boolean, showNoise as Boolean,
-            showRain as Boolean, showRain1h as Boolean, showRain24h as Boolean,
+            showRain as Boolean, showRain1h as Boolean, showRain24h as Boolean, showWind as Boolean, showGust as Boolean,
             activateBackgroundLoading as Boolean, backgroundRefreshInterval as Number) {
         self._showTemp = showTemp;
         self._showCO2 = showCO2;
@@ -24,6 +26,8 @@ class Config {
         self._showRain = showRain;
         self._showRain1h = showRain1h;
         self._showRain24h = showRain24h;
+        self._showWind = showWind;
+        self._showGust = showGust;
         self._activateBackgroundLoading = activateBackgroundLoading;
         self._backgroundRefreshInterval = backgroundRefreshInterval;
     }
@@ -36,6 +40,8 @@ class Config {
     public function showRain() as Boolean { return self._showRain; }
     public function showRain1h() as Boolean { return self._showRain1h; }
     public function showRain24h() as Boolean { return self._showRain24h; }
+    public function showWind() as Boolean { return self._showWind; }
+    public function showGust() as Boolean { return self._showGust; }
     public function activateBackgroundLoading() as Boolean { return self._activateBackgroundLoading; }
     public function backgroundRefreshInterval() as Number { return self._backgroundRefreshInterval; }
 }

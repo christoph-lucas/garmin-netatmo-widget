@@ -8,6 +8,8 @@
 	<property id="showRain" type="boolean">true</property>
 	<property id="showRain1h" type="boolean">true</property>
 	<property id="showRain24h" type="boolean">true</property>
+	<property id="showWind" type="boolean">true</property>
+	<property id="showGust" type="boolean">true</property>
 	<property id="activateBackgroundLoading" type="boolean">true</property>
 	<property id="backgroundRefreshInterval" type="number">5</property>
 </properties>

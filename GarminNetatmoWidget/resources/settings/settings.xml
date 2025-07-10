@@ -29,6 +29,12 @@
     <setting propertyKey="@Properties.showRain24h" title="Show rain (last 24h)">
         <settingConfig type="boolean" />
     </setting>
+    <setting propertyKey="@Properties.showWind" title="Show wind">
+        <settingConfig type="boolean" />
+    </setting>
+    <setting propertyKey="@Properties.showGust" title="Show gust">
+        <settingConfig type="boolean" />
+    </setting>
 
     <setting propertyKey="@Properties.activateBackgroundLoading" title="Activate refresh in background">
         <settingConfig type="boolean" />
