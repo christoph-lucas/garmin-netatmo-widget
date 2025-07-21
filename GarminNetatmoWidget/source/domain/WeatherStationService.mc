@@ -15,11 +15,19 @@ class WeatherStationService {
     public function config() as Config { return self._config; }
 
     public function loadStationData(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
-        self._repo.loadStationData(dataConsumer, notificationConsumer);
+        try {
+            self._repo.loadStationData(dataConsumer, notificationConsumer);        
+        } catch (ex) {
+            notificationConsumer.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
+        }
     }
 
     public function loadStationDataInBackground(dataConsumer as DataConsumer, notificationConsumer as NotificationConsumer) as Void {
-        self._repo.loadStationDataInBackground(dataConsumer, notificationConsumer);
+        try {
+            self._repo.loadStationDataInBackground(dataConsumer, notificationConsumer);
+        } catch (ex) {
+            notificationConsumer.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
+        }
     }
 
     public function dropAuthenticationDataIfConnected() as Void {
