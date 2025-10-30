@@ -57,19 +57,23 @@ class StationsDataEndpoint {
     }
 
     public function onReceiveHomesData(responseCode as Number, data as Dictionary or String or Null) as Void {
-        if (responseCode == 200) {
-            self._notificationConsumer.invoke(new Status("Data received, processing..."));
-            if (self._handler != null) {
-                (self._handler as StationsDataConsumer).invoke(self._mapResponseToMainStationData((data as Dictionary<String, String or Dictionary>)));
+        try {
+            if (responseCode == 200) {
+                self._notificationConsumer.invoke(new Status("Data received, processing..."));
+                if (self._handler != null) {
+                    (self._handler as StationsDataConsumer).invoke(self._mapResponseToMainStationData((data as Dictionary<String, String or Dictionary>)));
+                } else {
+                    self._notificationConsumer.invoke(new WeatherStationError("No StationsDataConsumer defined."));
+                }
             } else {
-                self._notificationConsumer.invoke(new WeatherStationError("No StationsDataConsumer defined."));
+                var typedData = data as Dictionary<String, Dictionary<String, String or Number>>;
+                var error = typedData["error"] as Dictionary<String, String or Number>;
+                var error_code = error["code"] as Number;
+                var error_msg = error["message"] as String;
+                self._notificationConsumer.invoke(new WebRequestError("StationsData", responseCode, error_msg, error_code));
             }
-        } else {
-            var typedData = data as Dictionary<String, Dictionary<String, String or Number>>;
-            var error = typedData["error"] as Dictionary<String, String or Number>;
-            var error_code = error["code"] as Number;
-            var error_msg = error["message"] as String;
-            self._notificationConsumer.invoke(new WebRequestError("StationsData", responseCode, error_msg, error_code));
+        } catch (ex) {
+            self._notificationConsumer.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
         }
     }
 
@@ -80,7 +84,11 @@ class StationsDataEndpoint {
         var numberOfDevices = rawDevices.size();
         var devices = new Array[numberOfDevices] as Array<Device>;
         for (var i = 0; i<numberOfDevices; i++) {
-            devices[i] = self._mapDevice(rawDevices[i]);
+            try {
+                devices[i] = self._mapDevice(rawDevices[i]);
+            } catch (ex) {
+                self._notificationConsumer.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
+            }
         }
 
         return new WeatherStationsData(devices);

@@ -304,19 +304,23 @@ public class RefreshAccessTokenEndpoint {
     }
 
     public function onReceiveTokens(responseCode as Number, data as Dictionary or String or Null) as Void {
-        var typedData = data as Dictionary<String, String>;
-        if (responseCode == 200) {
-            var refresh_token = typedData["refresh_token"] as String;
-            var accessToken = typedData["access_token"] as String;
-            var expires_in = typedData["expires_in"] as Number;
-            if (self._handler != null) {
-                (self._handler as TokensHandler).invoke(refresh_token, accessToken, expires_in);
+        try {
+            var typedData = data as Dictionary<String, String>;
+            if (responseCode == 200) {
+                var refresh_token = typedData["refresh_token"] as String;
+                var accessToken = typedData["access_token"] as String;
+                var expires_in = typedData["expires_in"] as Number;
+                if (self._handler != null) {
+                    (self._handler as TokensHandler).invoke(refresh_token, accessToken, expires_in);
+                } else {
+                    self._errorHandler.invoke(new WeatherStationError("No TokensHandler defined."));
+                }
             } else {
-                self._errorHandler.invoke(new WeatherStationError("No TokensHandler defined."));
+                var error = typedData["error"];
+                self._errorHandler.invoke(new WebRequestError("Tokens", responseCode, null, error));
             }
-        } else {
-            var error = typedData["error"];
-            self._errorHandler.invoke(new WebRequestError("Tokens", responseCode, null, error));
+        } catch (ex) {
+            self._errorHandler.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
         }
     }
 }
