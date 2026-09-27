@@ -17,4 +17,17 @@ Icon thanks to Iconfinder / Adri Ansyah.
 
 ## Error handling
 
+### Invalid Grant
+
 If you get the error message "Tokens 400: Invalid Grant", go to the menu and trigger a Reauthentication. This error probably means that the app tried to refresh the access token, yet the refresh token was not valid anymore. In that case, the only remedy is to reauthenticate.
+
+### View loop must be non zero value
+
+If the view loop is empty ("zero value"), either there is no station data for your account, or the parsing of the station data fails. You can retrieve the station data yourself by performing the following steps (at some point you will have to authenticate with Netatmo):
+
+1. Go to https://dev.netatmo.com/apidocumentation/weather#getstationsdata 
+2. Click „Try It Out“
+3. Click „Execute /GetStationsData“
+4. Under Server Response -> Response body: check if the response looks good, it should start with `"{ body: { devices:[…“)`
+
+I would expect the response to be empty, or that it does not look like the "Response Examples". In either case the app will not work.
