@@ -81,11 +81,10 @@ class StationsDataEndpoint {
         var body = data["body"] as Dictionary<String, Array or Dictionary>;
         var rawDevices = body["devices"] as Array<Dictionary<String, String or Number or Dictionary>>;
 
-        var numberOfDevices = rawDevices.size();
-        var devices = new Array[numberOfDevices] as Array<Device>;
-        for (var i = 0; i<numberOfDevices; i++) {
+        var devices = [] as Array<Device>;
+        for (var i = 0; i<rawDevices.size(); i++) {
             try {
-                devices[i] = self._mapDevice(rawDevices[i]);
+                devices.add(self._mapDevice(rawDevices[i]));
             } catch (ex) {
                 self._notificationConsumer.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
             }
@@ -97,11 +96,17 @@ class StationsDataEndpoint {
     private function _mapDevice(device as Dictionary<String, String or Number or Dictionary>) as Device {
         var mainStation = self._mapToWeatherStationData(device);
 
-        var rawModules = device["modules"] as Array<Dictionary<String, String or Number or Dictionary>>;
-        var numberOfModules = rawModules.size();
-        var modules = new Array[numberOfModules] as Array<WeatherStationData>;
-        for (var i = 0; i<numberOfModules; i++) {
-            modules[i] = self._mapToWeatherStationData(rawModules[i]);
+        var rawModules = device["modules"] as Array<Dictionary<String, String or Number or Dictionary>>?;
+        if (rawModules == null) {
+            rawModules = [] as Array<Dictionary<String, String or Number or Dictionary>>;
+        }
+        var modules = [] as Array<WeatherStationData>;
+        for (var i = 0; i<rawModules.size(); i++) {
+            try {
+                modules.add(self._mapToWeatherStationData(rawModules[i]));
+            } catch (ex) {
+                self._notificationConsumer.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
+            }
         }
 
         return new Device(mainStation, modules);
