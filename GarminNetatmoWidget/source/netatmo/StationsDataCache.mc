@@ -12,7 +12,7 @@ public class StationsDataCache {
 
     public function store(data as WeatherStationsData) as Void {
         var mappedValue = data.toDict() as WeatherStationsDataDict;
-        Storage.setValue(STATIONS_DATA_CACHE, mappedValue as Dictionary<PropertyKeyType, PropertyValueType>);
+        Storage.setValue(STATIONS_DATA_CACHE, mappedValue as Dictionary<Storage.KeyType, Storage.ValueType>);
 
         var validUntil = self._computeValidUntil(data) as Timestamp;
         Storage.setValue(STATIONS_DATA_CACHE_VALID_UNTIL, validUntil.value());
