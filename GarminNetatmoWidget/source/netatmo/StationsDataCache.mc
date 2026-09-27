@@ -19,15 +19,20 @@ public class StationsDataCache {
     }
 
     public function get() as WeatherStationsDataWithValidity? {
-        var mappedValue = Storage.getValue(STATIONS_DATA_CACHE) as Dictionary?;
-        if (mappedValue != null) {
-            var validUntil = Storage.getValue(STATIONS_DATA_CACHE_VALID_UNTIL) as Number?;
-            if (validUntil != null) {
-                return new WeatherStationsDataWithValidity(
-                    WeatherStationsData.fromDict(mappedValue as WeatherStationsDataDict),
-                    new Timestamp(validUntil)
-                );
+        try {
+            var mappedValue = Storage.getValue(STATIONS_DATA_CACHE) as Dictionary?;
+            if (mappedValue != null) {
+                var validUntil = Storage.getValue(STATIONS_DATA_CACHE_VALID_UNTIL) as Number?;
+                if (validUntil != null) {
+                    return new WeatherStationsDataWithValidity(
+                        WeatherStationsData.fromDict(mappedValue as WeatherStationsDataDict),
+                        new Timestamp(validUntil)
+                    );
+                }
             }
+        } catch (ex) {
+            // cached data is unreadable/corrupt: drop it and treat as a cache miss
+            self.clear();
         }
         return null;
     }
