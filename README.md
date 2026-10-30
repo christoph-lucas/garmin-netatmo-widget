@@ -26,8 +26,10 @@ If you get the error message "Tokens 400: Invalid Grant", go to the menu and tri
 If the view loop is empty ("zero value"), either there is no station data for your account, or the parsing of the station data fails. You can retrieve the station data yourself by performing the following steps (at some point you will have to authenticate with Netatmo):
 
 1. Go to https://dev.netatmo.com/apidocumentation/weather#getstationsdata 
-2. Click „Try It Out“
-3. Click „Execute /GetStationsData“
-4. Under Server Response -> Response body: check if the response looks good, it should start with `"{ body: { devices:[…“)`
+2. Log in (button in the top right corner of the page)
+3. Click „Try It Out“
+4. Click „Execute /GetStationsData“
+5. Under Server Response -> Response body: check if the response looks good, it should start with `"{ body: { devices:[…“)`
+6. If you think it looks good, please send me the output (there is a "copy" button in the Response Body field, top right corner of the field)
 
 I would expect the response to be empty, or that it does not look like the "Response Examples". In either case the app will not work.
