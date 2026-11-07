@@ -3,6 +3,10 @@ import Toybox.Lang;
 
 function navigateToStationsDataView(data as WeatherStationsData, service as WeatherStationService) as Void {
     try {
+        if (data.allStations().size() == 0) {
+            navigateToNotificationView(service, new WeatherStationError("No stations found"));
+            return;
+        }
         var loop = new ViewLoop(new WeatherStationsViewFactory(data, service), null);
         WatchUi.switchToView(loop, new ViewLoopDelegate(loop), WatchUi.SLIDE_LEFT);
     } catch (ex) {

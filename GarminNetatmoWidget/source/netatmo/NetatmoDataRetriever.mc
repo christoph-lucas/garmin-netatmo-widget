@@ -82,12 +82,22 @@ class StationsDataEndpoint {
         var rawDevices = body["devices"] as Array<Dictionary<String, String or Number or Dictionary>>;
 
         var devices = [] as Array<Device>;
+        var firstError = null as String?;
         for (var i = 0; i<rawDevices.size(); i++) {
             try {
                 devices.add(self._mapDevice(rawDevices[i]));
             } catch (ex) {
-                self._notificationConsumer.invoke(new WeatherStationError("Msg: " + ex.getErrorMessage()));
+                if (firstError == null) { firstError = ex.getErrorMessage(); }
             }
+        }
+
+        if (devices.size() == 0) {
+            // surface the real cause instead of letting an empty view loop hide it;
+            // caught in onReceiveHomesData and reported as a single WeatherStationError
+            throw new Lang.InvalidValueException(firstError != null ? firstError : "No devices in response");
+        }
+        if (firstError != null) {
+            self._notificationConsumer.invoke(new WeatherStationError("Msg: " + firstError));
         }
 
         return new WeatherStationsData(devices);
