@@ -36,6 +36,29 @@
         <settingConfig type="boolean" />
     </setting>
 
+    <setting propertyKey="@Properties.glanceField1" title="Glance view: first value">
+        <settingConfig type="list">
+            <listEntry value="0">Temperature</listEntry>
+            <listEntry value="1">CO2</listEntry>
+            <listEntry value="2">Humidity</listEntry>
+            <listEntry value="3">Pressure</listEntry>
+            <listEntry value="4">Noise</listEntry>
+            <listEntry value="5">Rain</listEntry>
+            <listEntry value="6">Wind</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.glanceField2" title="Glance view: second value">
+        <settingConfig type="list">
+            <listEntry value="0">Temperature</listEntry>
+            <listEntry value="1">CO2</listEntry>
+            <listEntry value="2">Humidity</listEntry>
+            <listEntry value="3">Pressure</listEntry>
+            <listEntry value="4">Noise</listEntry>
+            <listEntry value="5">Rain</listEntry>
+            <listEntry value="6">Wind</listEntry>
+        </settingConfig>
+    </setting>
+
     <setting propertyKey="@Properties.activateBackgroundLoading" title="Activate refresh in background">
         <settingConfig type="boolean" />
     </setting>

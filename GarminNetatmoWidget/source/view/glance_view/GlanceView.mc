@@ -41,9 +41,11 @@ class GlanceView extends Ui.GlanceView {
         var justification = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
         if (self._data != null) {
             dc.drawText(0, 0.33 * dc.getHeight(), Graphics.FONT_SMALL, (self._data as WeatherStationData).name(), justification);
-            var temp = (self._data as WeatherStationData).temperature().toShortString();
-            var co2 = (self._data as WeatherStationData).co2().toShortString();
-            dc.drawText(0, 0.75 * dc.getHeight(), Graphics.FONT_TINY, temp + " / " + co2, justification);
+            var config = self._service.config();
+            var first = glanceFieldWithFallback(self._data as WeatherStationData, config.glanceField1(), null);
+            var second = glanceFieldWithFallback(self._data as WeatherStationData, config.glanceField2(), first != null ? first[0] : null);
+            var text = (first != null ? first[1] : "n/a") + " / " + (second != null ? second[1] : "n/a");
+            dc.drawText(0, 0.75 * dc.getHeight(), Graphics.FONT_TINY, text, justification);
         } else if (self._notification != null) {
             dc.drawText(0, dc.getHeight() / 2, Graphics.FONT_TINY, (self._notification as Notification).short(), justification);
         } else {

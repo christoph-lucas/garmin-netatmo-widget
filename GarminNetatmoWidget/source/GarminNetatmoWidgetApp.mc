@@ -27,6 +27,8 @@ class GarminNetatmoWidgetApp extends Application.AppBase {
             Properties.getValue("showRain24h") as Boolean,
             Properties.getValue("showWind") as Boolean,
             Properties.getValue("showGust") as Boolean,
+            Properties.getValue("glanceField1") as Number,
+            Properties.getValue("glanceField2") as Number,
             Properties.getValue("activateBackgroundLoading") as Boolean,
             Properties.getValue("backgroundRefreshInterval") as Number
         );

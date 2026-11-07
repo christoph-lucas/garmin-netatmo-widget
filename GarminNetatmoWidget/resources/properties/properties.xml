@@ -10,6 +10,8 @@
 	<property id="showRain24h" type="boolean">true</property>
 	<property id="showWind" type="boolean">true</property>
 	<property id="showGust" type="boolean">true</property>
+	<property id="glanceField1" type="number">0</property>
+	<property id="glanceField2" type="number">1</property>
 	<property id="activateBackgroundLoading" type="boolean">true</property>
 	<property id="backgroundRefreshInterval" type="number">5</property>
 </properties>
