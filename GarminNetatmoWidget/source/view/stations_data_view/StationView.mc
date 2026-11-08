@@ -26,7 +26,9 @@ class StationView extends WatchUi.View {
     }
 
     private function _drawStationData(dc as Dc) as Void {
-        dc.drawText(dc.getWidth() / 2, 0.2 * dc.getHeight(), Graphics.FONT_SMALL, self._data.name(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        var name = self._data.name();
+        if (self._isDefaultStation()) { name += " ★"; }
+        dc.drawText(dc.getWidth() / 2, 0.2 * dc.getHeight(), Graphics.FONT_SMALL, name, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         var displayString = self._data.measurementTimestamp().toString();
 
@@ -72,6 +74,11 @@ class StationView extends WatchUi.View {
             :justification => Graphics.TEXT_JUSTIFY_CENTER
         });
         textArea.draw(dc);
+    }
+
+    private function _isDefaultStation() as Boolean {
+        var defaultId = self._service.getDefaultStationId();
+        return defaultId != null && defaultId.equals(self._data.id());
     }
 
     function onLayout(dc as Dc) as Void { }
