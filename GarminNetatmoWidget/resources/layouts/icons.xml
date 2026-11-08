@@ -1,4 +1,12 @@
 <layouts>
+    <!-- system icons from the personality library, see https://developer.garmin.com/connect-iq/personality-library/iconography/ -->
+    <layout id="WarningIcon">
+        <bitmap id="warningIcon" personality="
+            system_icon_dark__warning
+            prompt_loc__title_icon
+            prompt_size__title_icon
+        " />
+    </layout>
     <!-- see https://developer.garmin.com/connect-iq/personality-library/action-views/ -->
     <layout id="MenuHint">
         <bitmap id="menuHint" personality="

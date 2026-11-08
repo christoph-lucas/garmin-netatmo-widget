@@ -27,17 +27,20 @@ class NotificationView extends WatchUi.View {
     }
 
     private function _drawNotification(dc as Dc, notification as Notification) as Void {
-        var text = "";
-        if (self._notification instanceof WeatherStationError) { text += "😟\n"; }
-        text += notification.long();
+        var textTop = 0;
+        if (notification instanceof WeatherStationError) {
+            var warningIcon = Rez.Layouts.WarningIcon(dc)[0] as Drawable;
+            warningIcon.draw(dc);
+            textTop = warningIcon.locY + warningIcon.height;
+        }
         var notificationTextArea = new WatchUi.TextArea({
-            :text => text,
+            :text => notification.long(),
             :color => Graphics.COLOR_WHITE,
             :font => [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_XTINY],
             :locX => WatchUi.LAYOUT_HALIGN_CENTER,
-            :locY=> WatchUi.LAYOUT_VALIGN_CENTER,
+            :locY=> textTop,
             :width => dc.getWidth(),
-            :height => dc.getHeight(),
+            :height => dc.getHeight() - textTop,
             :justification => Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         });
         notificationTextArea.draw(dc);
