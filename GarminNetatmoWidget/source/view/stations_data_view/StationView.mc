@@ -22,6 +22,7 @@ class StationView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
         dc.clear();
         self._drawStationData(dc);
+        drawMenuHint(dc);
     }
 
     private function _drawStationData(dc as Dc) as Void {

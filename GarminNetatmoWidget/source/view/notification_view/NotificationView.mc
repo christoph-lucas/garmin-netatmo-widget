@@ -23,6 +23,7 @@ class NotificationView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
         dc.clear();
         self._drawNotification(dc, self._notification);
+        drawMenuHint(dc);
     }
 
     private function _drawNotification(dc as Dc, notification as Notification) as Void {

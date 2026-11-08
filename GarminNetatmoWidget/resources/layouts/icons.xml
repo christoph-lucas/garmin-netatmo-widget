@@ -1,0 +1,9 @@
+<layouts>
+    <!-- see https://developer.garmin.com/connect-iq/personality-library/action-views/ -->
+    <layout id="MenuHint">
+        <bitmap id="menuHint" personality="
+            system_icon_dark__hint_action_menu
+            system_loc__hint_action_menu
+        " />
+    </layout>
+</layouts>
